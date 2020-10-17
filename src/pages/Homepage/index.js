@@ -1,29 +1,29 @@
 
-import React from 'react'
-import { observer, inject } from 'mobx-react'
+// import React from 'react'
+// import { observer, inject } from 'mobx-react'
 
-@observer
-class Homepage extends React.Component{
+// @observer
+// class Homepage extends React.Component{
 
-    // Homepage(){
+//     // Homepage(){
 
-    // }
+//     // }
 
-    componentDidMount(){
-        console.log('homepage didmount')
-    }
+//     componentDidMount(){
+//         console.log('homepage didmount')
+//     }
 
-    componentWillUnmount(){
-        this.dispoer()
-    }
+//     componentWillUnmount(){
+//         this.dispoer()
+//     }
     
-    render(){
-        return (
-            <div>
-                <h1>首頁</h1>
-            </div>
-        )
-    }
-}
+//     render(){
+//         return (
+//             <div>
+//                 <h1>首頁</h1>
+//             </div>
+//         )
+//     }
+// }
 
-export default Homepage
+// export default Homepage

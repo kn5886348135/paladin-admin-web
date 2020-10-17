@@ -1,7 +1,7 @@
-import Homepage from '../Homepage'
-import Login from '../Login'
+// import Homepage from '../Homepage'
+// import Login from '../Login'
 
-export default [
-    Homepage,
-    Login
-]
+// export default [
+//     Homepage,
+//     Login
+// ]
