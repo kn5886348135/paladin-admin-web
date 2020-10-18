@@ -3,7 +3,6 @@
     width: 300px;
     height: 100vh;
     margin: auto;
-    // background-color: white;
     align-items: center;
     > div {
         width: 100%;
@@ -17,11 +16,12 @@
     .column {
         float: left;
         font-size: 16px;
-        
+        color: white;
+        margin-bottom: 0 !important;
     }
     span {
      float: right;
-     font-size: 16px;
+     font-size: 12px;
      opacity: .3;
      color: red;
     }
