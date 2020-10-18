@@ -11,6 +11,7 @@
     "@typescript-eslint/eslint-plugin": "^2.10.0",
     "@typescript-eslint/parser": "^2.10.0",
     "antd": "4.7.0",
+    "axios": "^0.20.0",
     "babel-core": "6.26.3",
     "babel-eslint": "10.1.0",
     "babel-jest": "^24.9.0",
@@ -35,6 +36,7 @@
     "file-loader": "4.3.0",
     "fs-extra": "^8.1.0",
     "html-webpack-plugin": "4.0.0-beta.11",
+    "http-proxy-middleware": "^1.0.6",
     "identity-obj-proxy": "3.0.0",
     "jest": "24.9.0",
     "jest-environment-jsdom-fourteen": "1.0.1",
@@ -44,6 +46,7 @@
     "mobx": "^6.0.1",
     "mobx-react": "^7.0.0",
     "mobx-react-router": "4.1.0",
+    "node-sass": "4.14.1",
     "optimize-css-assets-webpack-plugin": "5.0.3",
     "pnp-webpack-plugin": "1.6.4",
     "postcss-flexbugs-fixes": "4.1.0",
@@ -53,6 +56,7 @@
     "postcss-safe-parser": "4.0.1",
     "react": "^16.13.1",
     "react-app-polyfill": "^1.0.6",
+    "react-app-rewired": "^2.1.6",
     "react-dev-utils": "^10.2.1",
     "react-dom": "^16.13.1",
     "react-router-dom": "5.2.0",
@@ -60,7 +64,6 @@
     "resolve-url-loader": "3.1.1",
     "sass-loader": "10.0.3",
     "sass-resources-loader": "2.1.1",
-    "node-sass": "4.14.1",
     "semver": "6.3.0",
     "style-loader": "0.23.1",
     "terser-webpack-plugin": "2.3.8",
@@ -75,7 +78,10 @@
   "scripts": {
     "start": "set PORT=3001&&node scripts/start.js",
     "build": "node scripts/build.js",
-    "test": "node scripts/test.js"
+    "test": "node scripts/test.js",
+    "build:dev": "dotenv -e .env.development react-app-rewired build",
+    "build.pro": "dotenv -e .env.production react-app-rewired build",
+    "build.test": "dotenv -e .env.test react-app-rewired build"
   },
   "babel": {
     "presets": [
