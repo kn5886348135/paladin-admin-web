@@ -1,33 +1,121 @@
 import React, { Fragment } from 'react'
 import "./index.scss"
-import { Form, Input, Button, Checkbox,Row, Col } from 'antd'
-import { UserOutlined, LockOutlined,UnlockOutlined } from '@ant-design/icons';
-import { validatePassword } from '../../utils/validate'
-import { Login } from '../../api/account'
+import { Form, Input, Button, Checkbox,Row, Col, Message } from 'antd'
+import { UserOutlined, LockOutlined,UnlockOutlined, PoweroffOutlined} from '@ant-design/icons';
+import { validatePassword, validate_email } from '../../utils/validate'
+import { Login,GetSMS } from '../../api/account'
+import { values } from 'mobx';
 
 class LoginForm extends React.Component{
     constructor(){
         super()
-        this.state ={}
+        this.state ={
+            username: "",
+            code_button_disabled: true,
+            code_button_loading: false,
+            code_button_text: '获取验证码',
+            login_button_loading: false,
+            // button对象有disable属性，其他dom可以使用额外的开关变量在执行点击方法时候判断
+            flag: true
+        }
         // this.form = {
         //     isFieldsTouched: false
         // }
     }
     onFinish = values => {
         console.log('login')
+        // this.setState({
+        //     login_button_loading: true
+        // })
         Login().then(response => {
             console.log(response)
+            // this.setState({
+            //     login_button_loading: false
+            // })
         }).catch(error => {
             
         })
         console.log('Finish:', values);
     }
 
+    getSMS = values => {
+        if (!this.state.username) {
+            Message.warning('用户名不能为空', 1)
+            return false
+        }
+        console.log('username changed '+this.state.username)
+        const requestData = {
+            username:"sdgs",
+            module:"login"
+        }
+        this.setState({
+            code_button_loading: true,
+            code_button_text:'发送中'
+        })
+        if (!this.state.flag) {
+            return false
+        }
+        this.setState({
+            flag: true
+        })
+        GetSMS(requestData).then(response => {
+            console.log(response)
+
+            this.countDown()
+        }).catch(error => {
+            console.log(error)
+            this.setState({
+                code_button_loading: false,
+                code_button_text:'重新获取',
+                flag: true
+            })
+        })
+        alert(111)
+    }
+
+    inputChange = (e) => {
+        console.log(e)
+        let value = e.target.value
+        console.log(value)
+        this.setState({
+            username: value
+        })
+    }
+
+    countDown = () => {
+        // setInterval clearInterval 不间断定时器
+        // setTimeout clearTimeout 只执行一次
+        let timer = null
+        
+        let sec = 5
+        this.setState({
+            code_button_loading: false,
+            code_button_disabled: true,
+            code_button_text:`${sec}S`,
+        })
+        timer = setInterval(() => {
+            sec--
+            if (sec <= 0) {
+                clearInterval(timer)
+                this.setState({
+                    code_button_disabled: false,
+                    code_button_text: '重新获取',
+                    flag: true
+                })
+               
+            }
+            this.setState({
+                code_button_text:`${sec}S`
+            })
+        }, 1000);
+    }
     toggleForm = (value) => {
         this.props.switchForm("regist")
         alert(111)
     }
     render(){
+        const { username,code_button_disabled,code_button_loading,code_button_text } = this.state;
+        const _this = this
         return(
             <div>
             <div className="form-header">
@@ -45,12 +133,24 @@ class LoginForm extends React.Component{
                 <Form.Item name="username" rules={
                     [
                         { required: true, message: '请输入用户名!' },
-                        { type: 'string', message:'请输入字符'},
+                        // { type: 'string', message:'请输入字符'},
+                        ({ getFieldValue }) => ({
+                            // ES6解构
+                                validator(rule, value) {
+                                    if (validate_email(value)) {
+                                        _this.setState({
+                                            code_button_disabled: false
+                                        })
+                                        return Promise.resolve();
+                                    }
+                                  return Promise.reject('The two passwords that you entered do not match!');
+                                },
+                              }),
                         { max: 20, message: '用户名长度不能超过16个字符'},
                         { min: 6, message: '用户名长度不能少于6个字符'}
                     ]
                 } style={{width: '100%'}}>
-                        <Input prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
+                        <Input value={username} onChange={this.inputChange} prefix={<UserOutlined className="site-form-item-icon" />} placeholder="Username" />
                     </Form.Item>
                     <Form.Item name="password" rules={
                         [
@@ -73,14 +173,16 @@ class LoginForm extends React.Component{
                             <Input prefix={<UnlockOutlined className="site-form-item-icon" />} type="password" placeholder="Code"/>
                             </Col>
                             <Col span={8}>
-                                <Button block>获取验证码</Button>
+                                {/* <Button type="danger" icon={<PoweroffOutlined />} loading={code_button_loading} disabled={code_button_disabled} block onClick={this.getSMS}>获取验证码</Button> */}
+                                {/* <Button type="danger" loading={code_button_loading} disabled={code_button_disabled} block onClick={this.getSMS}>{code_button_text}</Button> */}
+                                <button type="button" disabled={code_button_disabled} onClick={this.getSMS}>{code_button_text}</button>
                             </Col>
                         </Row>
                     </Form.Item>
                     {/* <Form.Item shouldUpdate={true}>{() => (<Button type="primary" htmlType="submit" disabled={!this.form.isFieldsTouched(true) || this.form.getFieldsError().filter(({ errors }) => errors.length).length}>Log in</Button>)}
                     </Form.Item> */}
                     <Form.Item>
-                        <Button type="primary" htmlType="submit" className="login-form-button" block>登录</Button>
+                        <Button type="primary" loading={code_button_loading} htmlType="submit" className="login-form-button" block>登录</Button>
                     </Form.Item>
                 </Form>
             </div>

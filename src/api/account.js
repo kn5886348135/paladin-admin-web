@@ -4,6 +4,14 @@ export function Login(data){
     return service.request({
         url:'/login/',
         method: 'post',
-        data: data
+        data
+    })
+}
+
+export function GetSMS(data){
+    return service.request({
+        url:'/getSms/',
+        method: 'post',
+        data
     })
 }
