@@ -15,3 +15,11 @@ export function GetSMS(data){
         data
     })
 }
+
+export function Regist(data){
+    return service.request({
+        url:'/register/',
+        method: 'post',
+        data
+    })
+}

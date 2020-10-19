@@ -6,6 +6,8 @@ import { validatePassword, validate_email } from '../../utils/validate'
 import { Login } from '../../api/account'
 import { values } from 'mobx';
 import Code from '../../components/code/index'
+import CryptoJS from 'crypto-js'
+
 class LoginForm extends React.Component{
     constructor(){
         super()
@@ -15,6 +17,8 @@ class LoginForm extends React.Component{
             code_button_loading: false,
             code_button_text: '获取验证码',
             login_button_loading: false,
+            module:"login",
+            code:""
             // button对象有disable属性，其他dom可以使用额外的开关变量在执行点击方法时候判断
             // flag: true 
         }
@@ -24,10 +28,12 @@ class LoginForm extends React.Component{
     }
     onFinish = values => {
         console.log('login')
-        // this.setState({
-        //     login_button_loading: true
-        // })
-        Login().then(response => {
+        const requestData = {
+            username:this.state.username,
+            password:CryptoJS.MD5(this.state.password).toString(),
+            code:this.state.code
+        }
+        Login(requestData).then(response => {
             console.log(response)
             // this.setState({
             //     login_button_loading: false
@@ -36,6 +42,28 @@ class LoginForm extends React.Component{
             
         })
         console.log('Finish:', values);
+    }
+
+    inputChangeUsername = (e) => {
+        let value = e.target.value
+        console.log(value)
+        this.setState({
+            username: value
+        })
+    }
+    inputChangePassword = (e) => {
+        let value = e.target.value
+        console.log(value)
+        this.setState({
+            password: value
+        })
+    }
+    inputChangeCode = (e) => {
+        let value = e.target.value
+        console.log(value)
+        this.setState({
+            code: value
+        })
     }
 
     inputChange = (e) => {
@@ -50,10 +78,9 @@ class LoginForm extends React.Component{
     
     toggleForm = (value) => {
         this.props.switchForm("regist")
-        alert(111)
     }
     render(){
-        const { username,code_button_disabled,code_button_loading,code_button_text } = this.state;
+        const { username,code_button_disabled,code_button_loading,code_button_text,module } = this.state;
         const _this = this
         return(
             <div>
@@ -99,7 +126,7 @@ class LoginForm extends React.Component{
                             { min: 6, message: '密码长度不能少于6个字符'},
                             { pattern: validatePassword, message: '密码只能是数字、字母和下划线'}
                         ]} style={{width: '100%'}}>
-                        <Input prefix={<UnlockOutlined className="site-form-item-icon" />} type="password" placeholder="Password"/>
+                        <Input onChange={this.inputChangePassword} prefix={<UnlockOutlined className="site-form-item-icon" />} type="password" placeholder="Password"/>
                     </Form.Item>
                     <Form.Item name="code" rules={
                         [
@@ -109,10 +136,10 @@ class LoginForm extends React.Component{
                     }>
                         <Row gutter={13}>
                             <Col span={16}>
-                            <Input prefix={<UnlockOutlined className="site-form-item-icon" />} type="password" placeholder="Code"/>
+                            <Input onChange={this.inputChangeCode} prefix={<UnlockOutlined className="site-form-item-icon" />} type="password" placeholder="Code"/>
                             </Col>
                             <Col span={8}>
-                                <Code user={username} />
+                                <Code username={username} module={module}/>
                                 {/* <Button type="danger" icon={<PoweroffOutlined />} loading={code_button_loading} disabled={code_button_disabled} block onClick={this.getSMS}>获取验证码</Button> */}
                                 {/* <Button type="danger" loading={code_button_loading} disabled={code_button_disabled} block onClick={this.getSMS}>{code_button_text}</Button> */}
                                 {/* <button type="button" disabled={code_button_disabled} onClick={this.getSMS}>{code_button_text}</button> */}

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Button, Message } from 'antd'
+import { Button, message, Message } from 'antd'
 import { GetSMS } from '../../api/account'
 import { validate_email } from '../../utils/validate'
 
@@ -11,9 +11,10 @@ class Code extends Component {
         console.log(props)
         this.state = {
             username: props.username,
-            code_button_disabled: true,
+            code_button_disabled: false,
             code_button_loading: false,
-            code_button_text: '获取验证码'
+            code_button_text: '获取验证码',
+            module: props.module
         }
     }
     // static getDerivedStateFromProps(nextProps, prevProps){
@@ -36,7 +37,7 @@ class Code extends Component {
     // }
     // 通过ES6扩展的方式只获取需要的属性
     componentWillReceiveProps({username}){
-        console.log(username+'aa')
+        console.log(username)
         console.log('componentWillReceiveProps')
         this.setState({
             // username: username
@@ -77,7 +78,7 @@ class Code extends Component {
         // })
         GetSMS(requestData).then(response => {
             console.log(response)
-
+            message.success(response.data.message)
             this.countDown()
         }).catch(error => {
             console.log(error)
@@ -87,7 +88,6 @@ class Code extends Component {
                 // flag: true
             })
         })
-        alert(111)
     }
 
     countDown = () => {
