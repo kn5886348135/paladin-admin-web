@@ -18,7 +18,8 @@ class LoginForm extends React.Component{
             code_button_text: '获取验证码',
             login_button_loading: false,
             module:"login",
-            code:""
+            code:"",
+            loading: false
             // button对象有disable属性，其他dom可以使用额外的开关变量在执行点击方法时候判断
             // flag: true 
         }
@@ -33,13 +34,24 @@ class LoginForm extends React.Component{
             password:CryptoJS.MD5(this.state.password).toString(),
             code:this.state.code
         }
+        this.setState({
+            loading:true
+        })
+        console.log(requestData)
         Login(requestData).then(response => {
             console.log(response)
             // this.setState({
             //     login_button_loading: false
             // })
+            if (response.data.code === 200) {
+                this.setState({
+                    loading:false
+                })
+            }
         }).catch(error => {
-            
+            this.setState({
+                loading:true
+            })
         })
         console.log('Finish:', values);
     }
@@ -60,7 +72,7 @@ class LoginForm extends React.Component{
     }
     inputChangeCode = (e) => {
         let value = e.target.value
-        console.log(value)
+        console.log(value+'inputchangecode')
         this.setState({
             code: value
         })
@@ -80,7 +92,7 @@ class LoginForm extends React.Component{
         this.props.switchForm("regist")
     }
     render(){
-        const { username,code_button_disabled,code_button_loading,code_button_text,module } = this.state;
+        const { username,code_button_disabled,code_button_loading,code_button_text,module,loading } = this.state;
         const _this = this
         return(
             <div>
@@ -149,7 +161,7 @@ class LoginForm extends React.Component{
                     {/* <Form.Item shouldUpdate={true}>{() => (<Button type="primary" htmlType="submit" disabled={!this.form.isFieldsTouched(true) || this.form.getFieldsError().filter(({ errors }) => errors.length).length}>Log in</Button>)}
                     </Form.Item> */}
                     <Form.Item>
-                        <Button type="primary" loading={code_button_loading} htmlType="submit" className="login-form-button" block>登录</Button>
+                        <Button type="primary" loading={loading} htmlType="submit" className="login-form-button" block>登录</Button>
                     </Form.Item>
                 </Form>
             </div>

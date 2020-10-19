@@ -14,7 +14,6 @@ class RegistForm extends React.Component{
             username:"",
             password:"",
             code:"",
-
             module:"register"
         }
         // this.form = {
@@ -26,15 +25,15 @@ class RegistForm extends React.Component{
         const requestData = {
             username:this.state.username,
             password: CryptoJS.MD5(this.state.password).toString(),
-            code:"",
+            code:this.state.code,
             module:"register"
         }
-        console.log(requestData)
+        // console.log(JSON.stringify(requestData)+'requestdata')
         console.log('Finish:', values);
         Regist(requestData).then(res => {
             const data = res.data;
-            message.success(data)
             console.log(res)
+            message.success(data.message)
             if (data.resCode === 0) {
                 this.toggleForm()
             }
@@ -59,7 +58,7 @@ class RegistForm extends React.Component{
     }
     inputChangeCode = (e) => {
         let value = e.target.value
-        console.log(value)
+        console.log(value+'codechange')
         this.setState({
             code: value
         })
@@ -67,7 +66,7 @@ class RegistForm extends React.Component{
     inputChange = (e) => {
         console.log(e)
         let value = e.target.value
-        console.log(value)
+        console.log(value+'usernamechange')
         this.setState({
             username: value
         })
