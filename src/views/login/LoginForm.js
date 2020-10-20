@@ -1,4 +1,6 @@
 import React, { Fragment } from 'react'
+import { withRouter } from 'react-router-dom'
+
 import "./index.scss"
 import { Form, Input, Button, Checkbox,Row, Col, Message } from 'antd'
 import { UserOutlined, LockOutlined,UnlockOutlined, PoweroffOutlined} from '@ant-design/icons';
@@ -7,7 +9,7 @@ import { Login } from '../../api/account'
 import { values } from 'mobx';
 import Code from '../../components/code/index'
 import CryptoJS from 'crypto-js'
-
+import { setToken, getToken } from '../../utils/session'
 class LoginForm extends React.Component{
     constructor(){
         super()
@@ -40,14 +42,18 @@ class LoginForm extends React.Component{
         console.log(requestData)
         Login(requestData).then(response => {
             console.log(response)
+            const data = response.data
+            setToken(data.token)
             // this.setState({
             //     login_button_loading: false
             // })
-            if (response.data.code === 200) {
+            if (response.data.resCode === 0) {
                 this.setState({
                     loading:false
                 })
             }
+            console.log(response)
+            this.props.history.push('/')
         }).catch(error => {
             this.setState({
                 loading:true
@@ -170,4 +176,4 @@ class LoginForm extends React.Component{
     }
 }
 
-export default LoginForm
+export default withRouter(LoginForm)
