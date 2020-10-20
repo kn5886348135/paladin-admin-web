@@ -3,7 +3,7 @@ import { Layout } from 'antd'
 import './layout.scss'
 import LayoutAside from './components/aside'
 import LayoutHeader from './components/header'
-
+import ContainerMain from '../../components/containerMain/index'
 const { Sider, Header, Content, Footer } = Layout
 
 class Index extends Component {
@@ -24,9 +24,11 @@ class Index extends Component {
                     <Sider width="250px">
                         <LayoutAside />
                     </Sider>
-                    <Content className="layout-main">工作区</Content>
-                    <Footer className="layout-footer">底部</Footer>
+                    <Content className="layout-main">
+                        <ContainerMain />
+                    </Content>
                 </Layout>
+                <Footer className="layout-footer">底部</Footer>
             </Layout>
         )
     }
