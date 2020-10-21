@@ -51,20 +51,20 @@ const router = [
     {
         title:'部门管理',
         icon:'bars',
-        path:'/index/navigation',
-        name:'index',
+        path:'/index/department',
+        name:'department',
         meta:{
             icon:'',
             title:''
         },
         children:[
             {
-                path: 'index/navigation/dropdown',
+                path: '/index/department/list',
                 title:'部门列表',
                 icon:''
             },
             {
-                path: 'index/navigation/menu',
+                path: '/index/department/add',
                 title:'添加部门',
                 icon:''
             }
