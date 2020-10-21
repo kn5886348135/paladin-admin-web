@@ -40,7 +40,7 @@ class AsideMenu extends Component {
 
     selectMenu = ({ item, key, keyPath, domEvent}) => {
         const menuKey = keyPath[keyPath.length -1]
-        
+        console.log('click menu')
         const menuHeight = {
             selectedKeys: key,
             openKeys: menuKey
@@ -48,6 +48,12 @@ class AsideMenu extends Component {
         this.menuHeightLight(menuHeight)
     }
 
+    openMenuChange = (openKeys) => {
+        this.setState({
+            openKeys:[openKeys[openKeys.length - 1]],
+            
+        })
+    }
     // menuHeightLight = (params) => {
     //     this.setState({
     //         selectedKeys: [params.selectedKeys],
@@ -87,7 +93,8 @@ class AsideMenu extends Component {
         return (
             <Fragment >
                <Menu
-               onClick={this.selectMenu}
+                onClick={this.selectMenu}
+                onOpenChange={this.openMenuChange}
                 selectedKeys={selectedKeys}
                 openKeys={openKeys}
                 mode="inline"
