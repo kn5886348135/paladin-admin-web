@@ -39,12 +39,12 @@ class DepartmentAdd extends Component {
                 loading: false
             })
             this.refs.form.resetFields()
-        }).catch(error => {
-            console.log(error)
-            this.setState({
-                loading: false
-            })
-        })
+        }, (error => {
+                console.log(error.request)
+                this.setState({
+                    loading: false
+                })
+        })).catch()
     }
 
     render(h) {

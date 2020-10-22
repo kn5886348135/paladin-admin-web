@@ -1,3 +1,4 @@
+import { message } from 'antd'
 import axios from 'axios'
 import { getToken,getUsername } from './cookies'
 
@@ -17,9 +18,15 @@ service.interceptors.request.use(function (config) {
 })
 
 service.interceptors.response.use(function (response) {
-    return response
+    const data = response.data
+    if (data.resCode !==0) {
+        message.error(data.message)
+        return Promise.reject(response)
+    }else{
+        return response
+    }
 }, function (error) {
-    return Promise.reject(error)
+    return Promise.reject(error.request)
 })
 
 export default service
