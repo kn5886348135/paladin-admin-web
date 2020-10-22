@@ -9,7 +9,7 @@ import { Login } from '../../api/account'
 import { values } from 'mobx';
 import Code from '../../components/code/index'
 import CryptoJS from 'crypto-js'
-import { setToken, getToken } from '../../utils/session'
+import { setToken, getToken,setUsername } from '../../utils/cookies'
 class LoginForm extends React.Component{
     constructor(){
         super()
@@ -43,7 +43,8 @@ class LoginForm extends React.Component{
         Login(requestData).then(response => {
             console.log(response)
             const data = response.data
-            setToken(data.token)
+            setToken(data.data.token)
+            setUsername(data.data.username)
             // this.setState({
             //     login_button_loading: false
             // })
@@ -53,7 +54,8 @@ class LoginForm extends React.Component{
                 })
             }
             console.log(response)
-            this.props.history.push('/')
+            console.log('start to push')
+            this.props.history.push('/index')
         }).catch(error => {
             this.setState({
                 loading:true

@@ -1,4 +1,5 @@
 import axios from 'axios'
+import { getToken,getUsername } from './cookies'
 
 const service = axios.create({
     baseURL: process.env.REACT_APP_API,
@@ -7,6 +8,9 @@ const service = axios.create({
 
 service.interceptors.request.use(function (config) {
     console.log(process.env.REACT_APP_API)
+    const token = sessionStorage.getItem('adminToken')
+    config.headers['token'] = getToken()
+    config.headers['username'] = getUsername()
     return config
 }, function (error) {
     return Promise.reject(error)

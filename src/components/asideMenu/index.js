@@ -51,7 +51,7 @@ class AsideMenu extends Component {
     openMenuChange = (openKeys) => {
         this.setState({
             openKeys:[openKeys[openKeys.length - 1]],
-            
+
         })
     }
     // menuHeightLight = (params) => {
@@ -99,7 +99,7 @@ class AsideMenu extends Component {
                 openKeys={openKeys}
                 mode="inline"
                 theme="dark"
-                inlineCollapsed={this.state.collapsed}
+                collapsed={this.state.collapsed}
                 >
                     {
                         Router && Router.map(item => {
