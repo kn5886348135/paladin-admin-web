@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Input, Button, Table, Switch, message } from 'antd'
-import { GetDepartmentListApi, DepartmentDeleteApi } from '@api/department'
+import { Link } from 'react-router-dom'
+import { Form, Input, Button, Table, Switch, message, Modal } from 'antd'
+import { GetDepartmentListApi, DepartmentDeleteApi,ChangeStatusApi } from '@api/department'
 
 class DepartmentList extends Component {
     constructor(props){
@@ -11,7 +12,7 @@ class DepartmentList extends Component {
                 title:'部门名称',dataIndex:'name',key:'name'
             },{
                 title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
-                    return <Switch checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
+                    return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
                 }
             },{
                 title:'人员数量',dataIndex:'number',key:'number'
@@ -21,18 +22,44 @@ class DepartmentList extends Component {
                 title:'操作',dataIndex:'operation',key:'operation',width:'200px',render: (text, rowData) => {
                     return (
                         <div className="inline-button">
-                            <Button type="primary">编辑</Button>
-                            <Button onClick={() => this.onHandlerDelete} type="primary">删除</Button>
+                            <Button onClick={() => this.onHandlerEdit(rowData)} type="primary">
+                                <Link to={{ pathname:"/index/department/edit",query:{id:rowData.id}}}>编辑</Link>
+                                {/* <Link to={'/index/department/edit?id=' + rowData.id}>编辑</Link> */}
+                            </Button>
+                            <Button onClick={() => this.onHandlerDelete(rowData)} type="primary">删除</Button>
                         </div>
                     )
                 }
             }
         ],
+        /*
+        react路由传参3种方式
+        params传参(刷新页面后参数不消失，参数会在地址栏显示)
+        路由页面 <Route path='/link/:id' component={Demo}></Route> 需要配置 /:id 路由跳转并传递参数
+        链接方式 <Link to={'/link/'+'xxx'}>首页</Link> 或者 <Link to={{pathname:'/link/'+'xxx'}>首页</Link>
+        js方式 this.props.history.push('/link/'+'xxx') 或者 this.props.history.push({pathname:'/link'+'xxx'})
+        获取参数 this.props.match.params.id 使用match而不是history
+
+        query传参(刷新页面后参数消失)
+        路由页面 <Route path='/demo' component={Demo}></Route> 无需配置 路由跳转并传递参数
+        链接方式 <Link to={{pathname:'/link/',query:{id:22,name:'dahuang'}}}>XX</Link>
+        js方式 this.props.history.push({pathname:'/link/',query:{id:22,name:'dahuang'}}) 
+        获取参数 this.props.location.query.name
+
+        state传参(刷新页面后参数不消失，state穿的参数是加密的)
+        路由页面 <Route path='/demo' component={Demo}></Route> 无需配置 路由跳转并传递参数
+        链接方式 <Link to={{pathname:'/link/',state:{id:22,name:'dahuang'}}}>XX</Link>
+        js方式 this.props.history.push({pathname:'/link/',state:{id:22,name:'dahuang'}}) 
+        获取参数 this.props.location.state.name
+        */
         data:[],
           pageNumber:1,
           pageSize:10,
           keyword:'',
-          selectedRowKeys:[]
+          selectedRowKeys:[],
+          visible: false,
+          id:'',
+          confirmLoading: false
         }
     }
 
@@ -68,22 +95,57 @@ class DepartmentList extends Component {
         })
     }
 
-    onHandlerDelete = (id) => {
+    onHandlerDelete(id){
         if (!id) {
             return false
         }
+        this.setState({
+            visible: true,
+            id:id
+        })
         DepartmentDeleteApi().then(res => {
             console.log(res)
             message.info(res.data.message)
             this.loadData()
         })
-        
+    }
+
+    onHandlerSwitch(data){
+        if (!data.status) {
+            return false
+        }
+        const requestData = {
+            id: data.id,
+            status: data.id === '1' ? true : false
+        }
+        ChangeStatusApi(id).then(res => {
+            message.info(res.data.message)
+            this.loadData()
+        })
     }
     onCheckbox = (selectedRowKeys) => {
         this.setState({
             selectedRowKeys: selectedRowKeys
         })
     }
+
+    modalThen = () => {
+        // 防止多次触发
+        this.setState({
+            confirmLoading: true
+        })
+        DepartmentDeleteApi({id: this.state.id}).then(res => {
+            message.info(res.data.message)
+            this.setState({
+                visible: false,
+                id:'',
+                confirmLoading: false
+            })
+            this.loadData()
+        })
+    }
+
+
     render(h) {
         const { columns, data } = this.state
         const rowSelection = {
@@ -107,7 +169,21 @@ class DepartmentList extends Component {
                 <div className="table-wrap">
                 <Table rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
                 </div>
-                
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.hideModal}
+                    onCancel={() => {
+                        this.setState({
+                            visible: false
+                        })
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                    confirmLoading={this.state.confirmLoading}
+                >
+                <p className="text-center">确定删除此信息？<strong className="color-red">删除后将无法恢复</strong></p>
+                </Modal>
             </Fragment>
         )
     }

@@ -23,3 +23,11 @@ export function DepartmentDeleteApi(data){
         data
     })
 }
+
+export function ChangeStatusApi(data){
+    return service.request({
+        url:'/department/status',
+        method: 'post',
+        data
+    })
+}
