@@ -118,7 +118,7 @@ class DepartmentList extends Component {
             id: data.id,
             status: data.id === '1' ? true : false
         }
-        ChangeStatusApi(id).then(res => {
+        ChangeStatusApi(data).then(res => {
             message.info(res.data.message)
             this.loadData()
         })

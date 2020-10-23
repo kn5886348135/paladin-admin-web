@@ -31,3 +31,19 @@ export function ChangeStatusApi(data){
         data
     })
 }
+
+export function DepartmentDetailApi(data){
+    return service.request({
+        url:'/department/detailed',
+        method: 'post',
+        data
+    })
+}
+
+export function DepartmentEditApi(data){
+    return service.request({
+        url:'/department/edit',
+        method: 'post',
+        data
+    })
+}

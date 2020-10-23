@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Form, Input,Button, InputNumber, Radio, message } from 'antd'
-import {DepartmentAddApi} from '../../api/department'
+import {DepartmentAddApi,DepartmentDetailApi,DepartmentEditApi } from '../../api/department'
 
 class DepartmentAdd extends Component {
     constructor(props){
@@ -11,10 +11,45 @@ class DepartmentAdd extends Component {
                 wrapperCol: {span: 20}
             },
             value: true,
-            loading: false
+            loading: false,
+            id:""
         }
     }
 
+    componentWillMount(){
+        if (!this.props.location.state) {
+            return false
+        }
+        this.setState({
+            id: this.props.location.state.id
+        })
+        console.log(this.props.location.state.id)
+    }
+
+    componentDidMount(){
+        // console.log(this.props.location.state.name)
+        console.log(this.state.id)
+        this.getDetail()
+    }
+
+    getDetail = () => {
+        if (!this.props.location.state) {
+            return false
+        }
+        DepartmentDetailApi(this.props.location.state.id).then(res=>{
+            console.log(res)
+            const data = res.data.data
+
+            this.refs.form.setFieldsValue({
+                content: data.content,
+                name: data.name,
+                number: data.number,
+                status: data.status
+            })
+            // this.refs.form.setFieldsValue(res.data.data){
+            // }
+        })
+    }
     onSubmit = (value) => {
         console.log(value)
         if(!value.name){
@@ -32,7 +67,30 @@ class DepartmentAdd extends Component {
         this.setState({
             loading: true
         })
+        this.state.id ? this.onHandlerEdit(value) :this.onHandlerAdd(value)
+    }
+
+    onHandlerAdd = () => {
         DepartmentAddApi(value).then(res => {
+            console.log(res)
+            message.info(res.data.message)
+            this.setState({
+                loading: false
+            })
+            this.refs.form.resetFields()
+        }, (error => {
+                console.log(error.request)
+                this.setState({
+                    loading: false
+                })
+        })).catch()
+    }
+
+    onHandlerEdit = () => {
+        const requestData = value
+        requestData.id = this.state.id
+
+        DepartmentEditApi(requestData).then(res => {
             console.log(res)
             message.info(res.data.message)
             this.setState({
