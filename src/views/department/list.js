@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
-import { Form, Input, Button, Table, Switch } from 'antd'
-import { GetDepartmentListApi, DepartmentDeleteApi } from '../../api/department'
+import { Form, Input, Button, Table, Switch, message } from 'antd'
+import { GetDepartmentListApi, DepartmentDeleteApi } from '@api/department'
 
 class DepartmentList extends Component {
     constructor(props){
@@ -104,7 +104,10 @@ class DepartmentList extends Component {
                     <Form.Item></Form.Item>
                     <Form.Item></Form.Item>
                 </Form>
+                <div className="table-wrap">
                 <Table rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
+                </div>
+                
             </Fragment>
         )
     }
