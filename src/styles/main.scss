@@ -56,4 +56,6 @@ body {
 //       transform: rotate(360deg);
 //     }
 //   }
-  
+.inline-button {
+  button + button { margin-left: 10px;}
+}
