@@ -60,7 +60,9 @@ class DepartmentList extends Component {
           visible: false,
           id:'',
           confirmLoading: false,
-          switchId:''
+          switchId:'',
+          taleLoading: false,
+          searchLoading: false
         }
     }
 
@@ -70,7 +72,13 @@ class DepartmentList extends Component {
             pageNumber:1,
             pageSize:10
         })
+        this.setState({
+            searchLoading: true
+        })
         this.loadData()
+        this.setState({
+            searchLoading: false
+        })
         console.log(value)
     }
 
@@ -87,16 +95,32 @@ class DepartmentList extends Component {
         if (keyword) {
             param.name=keyword
         }
+        this.setState({
+            taleLoading: true
+        })
         GetDepartmentListApi().then(res => {
             console.log(res)
             const data = res.data
             if (data.resCode === 0) {
             }
+            this.setState({
+                taleLoading: false
+            }).catch(error => {
+                this.setState({
+                    taleLoading: true
+                })
+            })
         })
     }
 
     onHandlerDelete(id){
         if (!id) {
+            // id为空进行批量删除，比较建议批量删除单独写一个方法
+            if (this.state.selectedRowKeys.length === 0) {
+                message.info('请勾选数据')
+                return false
+            }
+            id = this.state.selectedRowKeys.join()
             return false
         }
         this.setState({
@@ -158,7 +182,7 @@ class DepartmentList extends Component {
 
 
     render(h) {
-        const { columns, data } = this.state
+        const { columns, data, taleLoading, searchLoading } = this.state
         const rowSelection = {
             onChange: this.onCheckbox
         }
@@ -172,13 +196,14 @@ class DepartmentList extends Component {
                             <Input placeholder='部门名称'/>
                     </Form.Item>
                     <Form.Item>
-                        <Button type="primary" htmlType="submit">搜索</Button>
+                        <Button loading={searchLoading} type="primary" htmlType="submit">搜索</Button>
                     </Form.Item>
                     <Form.Item></Form.Item>
                     <Form.Item></Form.Item>
                 </Form>
                 <div className="table-wrap">
-                    <Table rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
+                    <Table loading={taleLoading} rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
+                     <Button onClick={() => this.onHandlerDelete()}>批量删除</Button>
                 </div>
                 <Modal
                     title="提示"
