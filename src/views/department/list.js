@@ -12,7 +12,7 @@ class DepartmentList extends Component {
                 title:'部门名称',dataIndex:'name',key:'name'
             },{
                 title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
-                    return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
+                    return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} loading={this.state.switchId === rowData.id ? true : false} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
                 }
             },{
                 title:'人员数量',dataIndex:'number',key:'number'
@@ -59,7 +59,8 @@ class DepartmentList extends Component {
           selectedRowKeys:[],
           visible: false,
           id:'',
-          confirmLoading: false
+          confirmLoading: false,
+          switchId:''
         }
     }
 
@@ -90,7 +91,6 @@ class DepartmentList extends Component {
             console.log(res)
             const data = res.data
             if (data.resCode === 0) {
-                
             }
         })
     }
@@ -114,6 +114,10 @@ class DepartmentList extends Component {
         if (!data.status) {
             return false
         }
+        // 使用组件属性控制连续点击，或者自定义一个flag开关值
+        this.setState({
+            switchId: data.id
+        })
         const requestData = {
             id: data.id,
             status: data.id === '1' ? true : false
@@ -121,6 +125,13 @@ class DepartmentList extends Component {
         ChangeStatusApi(data).then(res => {
             message.info(res.data.message)
             this.loadData()
+            this.setState({
+                switchId: data.id
+            })
+        }).catch(error => {
+            this.setState({
+                switchId: data.id
+            })
         })
     }
     onCheckbox = (selectedRowKeys) => {
@@ -167,7 +178,7 @@ class DepartmentList extends Component {
                     <Form.Item></Form.Item>
                 </Form>
                 <div className="table-wrap">
-                <Table rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
+                    <Table rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
                 </div>
                 <Modal
                     title="提示"

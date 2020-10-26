@@ -26,6 +26,15 @@ class DepartmentAdd extends Component {
         console.log(this.props.location.state.id)
     }
 
+    componentWillMount(){
+        const id = this.props.location.state.id
+        if (id) {
+            this.setState({
+                id:id
+            })
+        }
+    }
+
     componentDidMount(){
         // console.log(this.props.location.state.name)
         console.log(this.state.id)
