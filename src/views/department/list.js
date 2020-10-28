@@ -13,6 +13,7 @@ class DepartmentList extends Component {
                 checkbox: true,
                 rowKey: 'id',
                 tableLoading: false,
+                batchButton: false,
                 thead: [
                     {
                     title:'部门名称',dataIndex:'name',key:'name'
@@ -215,9 +216,9 @@ class DepartmentList extends Component {
                     <Form.Item></Form.Item>
                 </Form>
                 <div className="table-wrap">
-                    <TableComponent config={this.state.tableConfig} />
+                    <TableComponent batchButton={true} config={this.state.tableConfig} />
                     {/* <Table loading={tableLoading} rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table> */}
-                    <Button onClick={() => this.onHandlerDelete()}>批量删除</Button>
+                    {/* <Button onClick={() => this.onHandlerDelete()}>批量删除</Button> */}
                 </div>
                 <Modal
                     title="提示"

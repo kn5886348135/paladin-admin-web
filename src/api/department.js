@@ -8,21 +8,15 @@ export function DepartmentAddApi(data){
     })
 }
 
-// export function GetDepartmentListApi(data){
-//     return service.request({
-//         url:'/department/list',
-//         method: 'post',
-//         data
-//     })
-// }
-
-export function GetDepartmentListApi(url,data){
+export function GetDepartmentListApi(data){
     return service.request({
-        url:url,
+        url:'/department/list',
         method: 'post',
         data
     })
 }
+
+
 
 export function DepartmentDeleteApi(data){
     return service.request({
