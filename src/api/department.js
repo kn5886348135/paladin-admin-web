@@ -8,9 +8,17 @@ export function DepartmentAddApi(data){
     })
 }
 
-export function GetDepartmentListApi(data){
+// export function GetDepartmentListApi(data){
+//     return service.request({
+//         url:'/department/list',
+//         method: 'post',
+//         data
+//     })
+// }
+
+export function GetDepartmentListApi(url,data){
     return service.request({
-        url:'/department/list',
+        url:url,
         method: 'post',
         data
     })

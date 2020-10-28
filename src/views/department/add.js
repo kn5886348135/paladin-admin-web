@@ -27,12 +27,12 @@ class DepartmentAdd extends Component {
     }
 
     componentWillMount(){
-        const id = this.props.location.state.id
-        if (id) {
-            this.setState({
-                id:id
-            })
-        }
+        // const id = this.props.location.state.id
+        // if (this.props.location.state.id) {
+        //     this.setState({
+        //         id:id
+        //     })
+        // }
     }
 
     componentDidMount(){
@@ -79,7 +79,7 @@ class DepartmentAdd extends Component {
         this.state.id ? this.onHandlerEdit(value) :this.onHandlerAdd(value)
     }
 
-    onHandlerAdd = () => {
+    onHandlerAdd = (value) => {
         DepartmentAddApi(value).then(res => {
             console.log(res)
             message.info(res.data.message)
@@ -95,7 +95,7 @@ class DepartmentAdd extends Component {
         })).catch()
     }
 
-    onHandlerEdit = () => {
+    onHandlerEdit = (value) => {
         const requestData = value
         requestData.id = this.state.id
 

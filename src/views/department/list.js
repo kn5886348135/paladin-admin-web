@@ -2,36 +2,43 @@ import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom'
 import { Form, Input, Button, Table, Switch, message, Modal } from 'antd'
 import { GetDepartmentListApi, DepartmentDeleteApi,ChangeStatusApi } from '@api/department'
-
+import TableComponent from '@c/table'
 class DepartmentList extends Component {
     constructor(props){
         super(props)
         this.state = {
-            columns: [
-                {
-                title:'部门名称',dataIndex:'name',key:'name'
-            },{
-                title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
-                    return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} loading={this.state.switchId === rowData.id ? true : false} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
+            tableConfig: {
+                url: 'departmentList',
+                method: 'post',
+                checkbox: true,
+                rowKey: 'id',
+                tableLoading: false,
+                thead: [
+                    {
+                    title:'部门名称',dataIndex:'name',key:'name'
+                },{
+                    title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
+                        return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} loading={this.state.switchId === rowData.id ? true : false} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
+                    }
+                },{
+                    title:'人员数量',dataIndex:'number',key:'number'
+                },{
+                    title:'描述',dataIndex:'conetnt',key:'conetnt'
+                },{
+                    title:'操作',dataIndex:'operation',key:'operation',width:'200px',render: (text, rowData) => {
+                        return (
+                            <div className="inline-button">
+                                <Button onClick={() => this.onHandlerEdit(rowData)} type="primary">
+                                    <Link to={{ pathname:"/index/department/edit",query:{id:rowData.id}}}>编辑</Link>
+                                    {/* <Link to={'/index/department/edit?id=' + rowData.id}>编辑</Link> */}
+                                </Button>
+                                <Button onClick={() => this.onHandlerDelete(rowData)} type="primary">删除</Button>
+                            </div>
+                        )
+                    }
                 }
-            },{
-                title:'人员数量',dataIndex:'number',key:'number'
-            },{
-                title:'描述',dataIndex:'conetnt',key:'conetnt'
-            },{
-                title:'操作',dataIndex:'operation',key:'operation',width:'200px',render: (text, rowData) => {
-                    return (
-                        <div className="inline-button">
-                            <Button onClick={() => this.onHandlerEdit(rowData)} type="primary">
-                                <Link to={{ pathname:"/index/department/edit",query:{id:rowData.id}}}>编辑</Link>
-                                {/* <Link to={'/index/department/edit?id=' + rowData.id}>编辑</Link> */}
-                            </Button>
-                            <Button onClick={() => this.onHandlerDelete(rowData)} type="primary">删除</Button>
-                        </div>
-                    )
-                }
-            }
-        ],
+            ]
+            },
         /*
         react路由传参3种方式
         params传参(刷新页面后参数不消失，参数会在地址栏显示)
@@ -61,7 +68,7 @@ class DepartmentList extends Component {
           id:'',
           confirmLoading: false,
           switchId:'',
-          taleLoading: false,
+          tableLoading: false,
           searchLoading: false
         }
     }
@@ -96,7 +103,7 @@ class DepartmentList extends Component {
             param.name=keyword
         }
         this.setState({
-            taleLoading: true
+            tableLoading: true
         })
         GetDepartmentListApi().then(res => {
             console.log(res)
@@ -104,10 +111,10 @@ class DepartmentList extends Component {
             if (data.resCode === 0) {
             }
             this.setState({
-                taleLoading: false
+                tableLoading: false
             }).catch(error => {
                 this.setState({
-                    taleLoading: true
+                    tableLoading: true
                 })
             })
         })
@@ -130,6 +137,12 @@ class DepartmentList extends Component {
         DepartmentDeleteApi().then(res => {
             console.log(res)
             message.info(res.data.message)
+            this.setState({
+                visible: false,
+                id:'',
+                confirmLoading: false,
+                selectedRowKeys:[]
+            })
             this.loadData()
         })
     }
@@ -182,7 +195,7 @@ class DepartmentList extends Component {
 
 
     render(h) {
-        const { columns, data, taleLoading, searchLoading } = this.state
+        const { columns, data, tableLoading, searchLoading } = this.state
         const rowSelection = {
             onChange: this.onCheckbox
         }
@@ -202,8 +215,9 @@ class DepartmentList extends Component {
                     <Form.Item></Form.Item>
                 </Form>
                 <div className="table-wrap">
-                    <Table loading={taleLoading} rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table>
-                     <Button onClick={() => this.onHandlerDelete()}>批量删除</Button>
+                    <TableComponent config={this.state.tableConfig} />
+                    {/* <Table loading={tableLoading} rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table> */}
+                    <Button onClick={() => this.onHandlerDelete()}>批量删除</Button>
                 </div>
                 <Modal
                     title="提示"
