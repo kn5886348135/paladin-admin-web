@@ -8,6 +8,14 @@ export function DepartmentAddApi(data){
     })
 }
 
+export function DepartmentAddFormApi(data){
+    return service.request({
+        url:'/department/addform',
+        method: 'post',
+        data
+    })
+}
+
 export function GetDepartmentListApi(data){
     return service.request({
         url:'/department/list',

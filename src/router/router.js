@@ -67,6 +67,11 @@ const router = [
                 path: '/index/department/add',
                 title:'添加部门',
                 icon:''
+            },
+            {
+                path: '/index/department/addform',
+                title:'添加部门表单封装',
+                icon:''
             }
         ]
     },
