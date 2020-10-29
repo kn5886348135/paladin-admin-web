@@ -15,8 +15,10 @@ class DepartmentAddForm extends Component {
             loading: false,
             id:"",
             formItem: [
-                { type: "Input", label: '部门名称',name:'name'},
-                { type: "Select", label: '部门名称aaa',name:'nameaaa'},
+                { type: "Input", label: '部门名称', name:'name', required: true, rules: [{}, {}]},
+                { type: "Select", label: '部门名称aaa', name:'nameaaa',rules: [
+                    { required: true, message: '部门名称不能为空'}
+                ]},
             ]
         }
     }
