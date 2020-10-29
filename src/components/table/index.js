@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react'
-import { Pagination, Table, Row, Col, Button } from 'antd'
+import { Form, Input, message, Modal, Pagination, Table, Row, Col, Button } from 'antd'
 import { TableList } from '@api/common'
 import requesturl from '@api/requesturl'
 import PropTypes from 'prop-types'
+import TableBasic from './Table'
 
 class TableComponent extends Component {
     constructor(props){
@@ -14,7 +15,8 @@ class TableComponent extends Component {
             tableLoading: false,
             data: [],
             tableLoading: false,
-            total:50
+            total:50,
+            searchLoading: false
         }
     }
 
@@ -40,12 +42,15 @@ class TableComponent extends Component {
             method: this.props.config.method,
             data: {
                 pageNumber: pageNumber,
-                pageSize: pageSize
+                pageSize: pageSize,
+                name: keyword
             }
             
         }
         param.url =requesturl[this.props.config.url]
-
+        if(keyword){
+            param.data.name = keyword
+        }
 
 
         TableList(param).then(res => {
@@ -98,6 +103,23 @@ class TableComponent extends Component {
 
     }
 
+    search = (value) => {
+        this.setState({
+            keyword:value.name,
+            pageNumber:1,
+            pageSize:10
+        })
+        this.setState({
+            searchLoading: true
+        })
+        this.loadData()
+        this.setState({
+            searchLoading: false
+        })
+        console.log(value)
+        this.loadData()
+    }
+
     onChangeCurrentPage = (value) => {
         // setState的第二个参数保证state的数据修改后可以立马生效
         // state的同步机制
@@ -119,14 +141,56 @@ class TableComponent extends Component {
     }
 
     render(h) {
-        const { thead,checkbox,rowKey,tableLoading,batchButton } = this.props.config
-        const rowSelection = {
-            onChange: this.onCheckbox
-        }
+        const { thead,checkbox,rowKey,tableLoading,batchButton,rowSelection,searchLoading } = this.props.config
+        // const rowSelection = {
+        //     onChange: this.onCheckbox
+        // }
         return (
             <Fragment>
-                <Table pagination={false} rowKey={rowKey || "id"} columns={thead} dataSource={this.props.config.data} rowSelection={checkbox?checkbox:null} bordered loading={tableLoading}/>
-                <Row>
+                <Form layout="inline" onFinish={this.search}>
+                    <Form.Item
+                        name="name"
+                        label="部门名称"
+                        rules={[{required: false, message:'请输入部门名称'}]}>
+                            <Input placeholder='部门名称'/>
+                    </Form.Item>
+                    <Form.Item>
+                        <Button loading={searchLoading} type="primary" htmlType="submit">搜索</Button>
+                    </Form.Item>
+                    <Form.Item></Form.Item>
+                    <Form.Item></Form.Item>
+                </Form>
+                <div className="table-wrap">
+                    <TableBasic 
+                        columns={thead} 
+                        dataSource={this.props.config.data}
+                        total={this.state.total}
+                        changePageCurrent={this.onChangeCurrentPage}
+                        changePageSize={this.onShowSizeChange}
+                        batchButton={false}
+                        handlerDelete={() => this.onHandlerDelete()}
+                        rowSelection={checkbox ? rowSelection : null}
+                        rowKey={rowKey}
+                        />
+                </div>
+                {/* <Table pagination={false} rowKey={rowKey || "id"} columns={thead} dataSource={this.props.config.data} rowSelection={checkbox?checkbox:null} bordered loading={tableLoading}/> */}
+                {/* <div className="spacing-30"></div> */}
+                <Modal
+                    title="提示"
+                    visible={this.state.visible}
+                    onOk={this.hideModal}
+                    onCancel={() => {
+                        this.setState({
+                            visible: false
+                        })
+                    }}
+                    okText="确认"
+                    cancelText="取消"
+                    confirmLoading={this.state.confirmLoading}
+                >
+                <p className="text-center">确定删除此信息？<strong className="color-red">删除后将无法恢复</strong></p>
+                </Modal>
+                {/* <Row>
                     <Col span={8}>
                         { this.props.batchButton &&<Button onClick={() => this.onHandlerDelete()}>批量删除</Button>}
                     </Col>
@@ -141,7 +205,7 @@ class TableComponent extends Component {
                             showQuickJumper
                             showTotal={total => `Total ${total} items`} />
                     </Col>
-                </Row>
+                </Row> */}
             </Fragment>
         )
     }

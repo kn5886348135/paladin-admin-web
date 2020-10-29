@@ -18,6 +18,7 @@ class ContainerMain extends React.Component{
         <Switch>
           {
             Components.map(item => {
+              console.log(item)
               return <PrivateRouter exact key={item.path} component={item.component} path={item.path} />
             })
           }

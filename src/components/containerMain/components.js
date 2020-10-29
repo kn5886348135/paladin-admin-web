@@ -8,6 +8,7 @@ files.keys().map(key => {
     return false
   }
 
+  console.log(key)
   const splitFileName = key.split('.')
   const jsonObj = {}
   const path = `/index${splitFileName[1].toLowerCase()}`

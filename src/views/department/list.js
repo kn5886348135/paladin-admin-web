@@ -16,7 +16,7 @@ class DepartmentList extends Component {
                 batchButton: false,
                 thead: [
                     {
-                    title:'部门名称',dataIndex:'name',key:'name'
+                    title:'部门名称',dataIndex:'name',key:'name',render: (name) => { return <a>{name}</a>}
                 },{
                     title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
                         return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} loading={this.state.switchId === rowData.id ? true : false} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
@@ -74,21 +74,21 @@ class DepartmentList extends Component {
         }
     }
 
-    search = (value) => {
-        this.setState({
-            keyword:value.name,
-            pageNumber:1,
-            pageSize:10
-        })
-        this.setState({
-            searchLoading: true
-        })
-        this.loadData()
-        this.setState({
-            searchLoading: false
-        })
-        console.log(value)
-    }
+    // search = (value) => {
+    //     this.setState({
+    //         keyword:value.name,
+    //         pageNumber:1,
+    //         pageSize:10
+    //     })
+    //     this.setState({
+    //         searchLoading: true
+    //     })
+    //     this.loadData()
+    //     this.setState({
+    //         searchLoading: false
+    //     })
+    //     console.log(value)
+    // }
 
     componentDidMount(){
         this.loadData()
@@ -202,7 +202,7 @@ class DepartmentList extends Component {
         }
         return (
             <Fragment>
-                <Form layout="inline" onFinish={this.search}>
+                {/* <Form layout="inline" onFinish={this.search}>
                     <Form.Item
                         name="name"
                         label="部门名称"
@@ -214,13 +214,13 @@ class DepartmentList extends Component {
                     </Form.Item>
                     <Form.Item></Form.Item>
                     <Form.Item></Form.Item>
-                </Form>
-                <div className="table-wrap">
-                    <TableComponent batchButton={true} config={this.state.tableConfig} />
+                </Form> */}
+                {/* <div className="table-wrap"> */}
+                    {/* <TableComponent batchButton={true} config={this.state.tableConfig} /> */}
                     {/* <Table loading={tableLoading} rowSelection={rowSelection} rowKey="id" columns={columns} dataSource={data} bordered></Table> */}
                     {/* <Button onClick={() => this.onHandlerDelete()}>批量删除</Button> */}
-                </div>
-                <Modal
+                {/* </div> */}
+                {/* <Modal
                     title="提示"
                     visible={this.state.visible}
                     onOk={this.hideModal}
@@ -234,7 +234,8 @@ class DepartmentList extends Component {
                     confirmLoading={this.state.confirmLoading}
                 >
                 <p className="text-center">确定删除此信息？<strong className="color-red">删除后将无法恢复</strong></p>
-                </Modal>
+                </Modal> */}
+                <TableComponent onRef={this.getChildRef} batchButton={true} config={this.state.tableConfig}/>
             </Fragment>
         )
     }
