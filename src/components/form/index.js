@@ -1,5 +1,6 @@
 import React, { Component, component, Fragment } from 'react'
-import { Form, Input, Select, Button } from 'antd'
+import { Form, Input, Select, Button, InputNumber } from 'antd'
+const { Option } = Select
 
 class FormComponent extends Component{
     constructor(props){
@@ -29,7 +30,7 @@ class FormComponent extends Component{
         const rules = this.rules(item)
         return (
             <Form.Item label={item.label} name={item.name} key={item.name} rules={rules}>
-                <Input />
+                <Input style={item.style} placeholder={item.placeholder} />
             </Form.Item>
         )
     }
@@ -38,7 +39,21 @@ class FormComponent extends Component{
         const rules = this.rules(item)
         return (
             <Form.Item label={item.label} name={item.name} key={item.name} rules={item.rules || []}>
-                <Select />
+                <Select style={item.style} placeholder={item.placeholder} >
+                    {
+                        item.options && item.options.map(ele => {
+                        return <Option value={ele.value} key={ele.value}>{ele.label}</Option>
+                        })
+                    }
+                </Select>
+            </Form.Item>
+        )
+    }
+
+    inputNumberElement = (item) => {
+        return (
+            <Form.Item label={item.label} name={item.name} key={item.name} rules={item.rules || []}>
+                <InputNumber min={item.min} max={item.max}/>
             </Form.Item>
         )
     }
@@ -55,6 +70,9 @@ class FormComponent extends Component{
             }
             if (item.type === 'Select') {
                 formItemList.push(this.selectElement(item));
+            }
+            if (item.type === 'InputNumber') {
+                formItemList.push(this.inputNumberElement(item));
             }
         })
         return formItemList
