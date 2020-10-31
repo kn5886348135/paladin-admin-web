@@ -29,10 +29,20 @@ class DepartmentAddForm extends Component {
                     label: '人员数量', 
                     name:'number', 
                     required: true, 
+                    min: 0,
+                    max: 100,
                     style: { width: '150px'},
-                    placeholder: '请输入人员数量',
-                    min:0,
-                    max:100
+                    placeholder: '请输入人员数量'
+                },
+                { 
+                    type: "Radio", 
+                    label: '禁启用', 
+                    name:'status', 
+                    required: true,
+                    options: [
+                        {label: '禁用',value: false},
+                        {label: '启用',value: true}
+                    ]
                 },
                 { 
                     type: "Select", 
@@ -152,7 +162,7 @@ class DepartmentAddForm extends Component {
         
         return (
             <Fragment>
-                <FormComponent formItem = {this.state.formItem} />
+                <FormComponent formItem = {this.state.formItem} formLayout={this.state.formLayout} onSubmit={this.onSubmit}/>
                 <Form ref="form" onFinish={this.onSubmit} initialValues={{ status:true,number:0 }} {...this.state.formLayout}>
                     <Form.Item label="部门名称" name="name">
                         <Input />

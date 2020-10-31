@@ -1,12 +1,16 @@
 import React, { Component, component, Fragment } from 'react'
-import { Form, Input, Select, Button, InputNumber } from 'antd'
+import { Form, Input, Select, Button, InputNumber, Radio } from 'antd'
 const { Option } = Select
 
 class FormComponent extends Component{
     constructor(props){
         super(props)
         this.state = {
-
+            messagePrefix:{
+                "Input":'请输入',
+                "Radio":'请选择',
+                "Select":'请选择'
+            }
         }
         console.log(props)
     }
@@ -16,9 +20,10 @@ class FormComponent extends Component{
     }
 
     rules = (item) => {
+        const { messagePrefix } = this.state
         let rules = []
         if (item.required) {
-            let message = item.message || `${item.label}不能为空`
+            let message = item.message || `${messagePrefix[item.type]}${item.label}`
             rules.push({required: true,message: message})
         }
         if (item.rules && item.rules.length > 0) {
@@ -58,6 +63,20 @@ class FormComponent extends Component{
         )
     }
 
+    radioElement = (item) => {
+        return (
+            <Form.Item label={item.label} name={item.name} key={item.name} rules={item.rules || []}>
+                <Radio.Group>
+                    {
+                    item.options && item.options.map(ele => {
+                        return <Radio value={ele.value} key={ele.value}>{ele.label}</Radio>
+                    })
+                    }
+                </Radio.Group>
+            </Form.Item>
+        )
+    }
+
     initFormItem = (item) => {
         const { formItem } = this.props
         if (!formItem || (formItem && formItem.length === 0)) {
@@ -74,12 +93,15 @@ class FormComponent extends Component{
             if (item.type === 'InputNumber') {
                 formItemList.push(this.inputNumberElement(item));
             }
+            if (item.type === 'Radio') {
+                formItemList.push(this.radioElement(item));
+            }
         })
         return formItemList
     }
 
     onSubmit = (value) => {
-
+        this.props.onSubmit(value)
     }
 
     render(){
@@ -88,7 +110,7 @@ class FormComponent extends Component{
                 { this.initFormItem() }
                 <Form.Item >
                         <Button loading={this.state.loading} htmlType="submit" type="primary" >确定</Button>
-                    </Form.Item>
+                </Form.Item>
             </Form>
         )
     }
