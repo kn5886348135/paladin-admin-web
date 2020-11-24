@@ -1,5 +1,7 @@
 import React, { Component, component, Fragment } from 'react'
 import { Form, Input, Select, Button, InputNumber, Radio } from 'antd'
+import { formSubmit } from '@api/common'
+
 const { Option } = Select
 
 class FormComponent extends Component{
@@ -102,6 +104,13 @@ class FormComponent extends Component{
 
     onSubmit = (value) => {
         this.props.onSubmit(value)
+        const data = {
+            url: "",
+            data: value
+        }
+        formSubmit(data).then(response => {
+
+        })
     }
 
     render(){

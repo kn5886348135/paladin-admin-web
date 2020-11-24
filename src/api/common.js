@@ -15,3 +15,16 @@ export function requestData(param){
         data: param.data
     })
 }
+
+/**
+ * common form submit
+ * 
+ * @param {*} param 
+ */
+export function formSubmit(param){
+    return service.request({
+        url: param.url,
+        method: param.method || 'post',
+        data: param.data
+    })
+}

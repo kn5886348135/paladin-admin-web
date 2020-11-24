@@ -7,7 +7,9 @@ export function setToken(value){
 }
 
 export function getToken(){
-    return cookies.load(adminToken)
+    // return cookies.load(adminToken)
+    //  随机 登录跳转
+    return "sddddddsdga"
 }
 
 export function setUsername(value){
