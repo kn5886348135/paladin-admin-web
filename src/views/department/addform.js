@@ -14,6 +14,9 @@ class DepartmentAddForm extends Component {
             value: true,
             loading: false,
             id:"",
+            formConfig:{
+                url: "departmentAdd"
+            },
             formItem: [
                 { 
                     type: "Input", 
@@ -68,15 +71,6 @@ class DepartmentAddForm extends Component {
             id: this.props.location.state.id
         })
         console.log(this.props.location.state.id)
-    }
-
-    componentWillMount(){
-        // const id = this.props.location.state.id
-        // if (this.props.location.state.id) {
-        //     this.setState({
-        //         id:id
-        //     })
-        // }
     }
 
     componentDidMount(){
@@ -162,7 +156,7 @@ class DepartmentAddForm extends Component {
         
         return (
             <Fragment>
-                <FormComponent formItem = {this.state.formItem} formLayout={this.state.formLayout} onSubmit={this.onSubmit}/>
+                <FormComponent formItem = {this.state.formItem} formLayout={this.state.formLayout} formConfig={this.state.formConfig}/>
                 <Form ref="form" onFinish={this.onSubmit} initialValues={{ status:true,number:0 }} {...this.state.formLayout}>
                     <Form.Item label="部门名称" name="name">
                         <Input />

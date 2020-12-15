@@ -3,11 +3,10 @@ import { Form, Input, Select, Button, InputNumber, Radio, message } from 'antd'
 import { formSubmit } from '@api/common'
 import requestUrl from "@api/requesturl"
 import PropTypes from 'prop-types'
-import FormSearch from '../formSearch'
 
 const { Option } = Select
 
-class FormComponent extends Component{
+class FormSearch extends Component{
     constructor(props){
         super(props)
         this.state = {
@@ -131,7 +130,7 @@ class FormComponent extends Component{
 
     render(){
         return(
-            <Form ref="form" onFinish={this.onSubmit} initialValues={{ status:true,number:0 }} {...this.props.formLayout}>
+            <Form layout="inline" ref="form" onFinish={this.onSubmit} initialValues={{ status:true,number:0 }} {...this.props.formLayout}>
                 { this.initFormItem() }
                 <Form.Item >
                         <Button loading={this.state.loading} htmlType="submit" type="primary" >确定</Button>
@@ -149,4 +148,4 @@ FormSearch.defaultProps = {
     batchButton: false
 }
 
-export default FormComponent
+export default FormSearch

@@ -18,6 +18,7 @@ files.keys().map(key => {
   components.push(jsonObj)
 
   console.log(files(key).default)
+  
 })
 
 export default components
