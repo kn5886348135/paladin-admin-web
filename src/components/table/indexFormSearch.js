@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react'
-import { Form, Input, Modal, Button } from 'antd'
+import { Form, Input, message, Modal, Pagination, Table, Row, Col, Button } from 'antd'
 import { TableList } from '@api/common'
 import requesturl from '@api/requesturl'
 import PropTypes from 'prop-types'
@@ -142,7 +142,7 @@ class TableComponent extends Component {
     }
 
     render(h) {
-        const { thead,checkbox,rowKey,tableLoading,batchButton,rowSelection,searchLoading } = this.props.config
+        const { thead, checkbox, rowKey, rowSelection, searchLoading, formItem } = this.props.config
         // const rowSelection = {
         //     onChange: this.onCheckbox
         // }
@@ -161,6 +161,7 @@ class TableComponent extends Component {
                     <Form.Item></Form.Item>
                     <Form.Item></Form.Item>
                 </Form>
+                <FormSearch formItem={formItem}/>
                 <div className="table-wrap">
                     <TableBasic 
                         columns={thead} 
