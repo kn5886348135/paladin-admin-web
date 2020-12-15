@@ -1,7 +1,5 @@
 import React from 'react';
-import { HashRouter, Switch, Route, Router, BrowserRouter, HashHistory,Link } from 'react-router-dom'
-import logo from './logo.svg';
-import Home from './views/Home'
+import { Switch, Route, BrowserRouter } from 'react-router-dom'
 import Login from './views/login/index'
 import Index from './views/index/index'
 import PrivateRouter from './components/privateRouter/index'
@@ -17,7 +15,7 @@ render(h) {
       <Switch>
         {/* <Route exact component={Index} exact path="/" /> */}
         {/* <Route exact render={() => true ? 11 : <Index/> } path='/' /> */}
-        <Route exact component={Login} exact path="/login" />
+        <Route exact component={Login} path="/login" />
         <PrivateRouter component={Index} path="/" />
       </Switch>
     </BrowserRouter>

@@ -1,10 +1,6 @@
 import React from 'react';
-import { HashRouter, Switch, Route, Router, BrowserRouter, HashHistory,Link } from 'react-router-dom'
+import { Switch } from 'react-router-dom'
 import PrivateRouter from '../privateRouter/index'
-// import User from '../../views/user/list'
-// import AddUser from '../../views/user/add'
-// import DepartmentList from '../../views/department/list'
-// import DepartmentAdd from '../../views/department/add'
 import Components from './components'
 
 class ContainerMain extends React.Component{

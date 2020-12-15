@@ -1,10 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import Router from './router/router'
 import App from './App';
 import * as serviceWorker from './serviceWorker';
-import { Provider } from 'mobx-react'
-import store from './store'
 
 ReactDOM.render(
   <App />,

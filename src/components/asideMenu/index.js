@@ -2,17 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link,withRouter } from 'react-router-dom'
 import './aside.scss'
 import { Menu } from 'antd'
-import {
-    AppstoreOutlined,
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    PieChartOutlined,
-    DesktopOutlined,
-    ContainerOutlined,
-    MailOutlined,
-    SettingOutlined,
-    UserOutlined
-  } from '@ant-design/icons';
+import { UserOutlined } from '@ant-design/icons';
 import Router from '../../router/router'
 
 const { SubMenu } = Menu

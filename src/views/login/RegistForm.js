@@ -1,8 +1,8 @@
 import React, { Fragment } from 'react'
 import "./index.scss"
-import { Form, Input, Button, Checkbox,Row, Col, message } from 'antd'
-import { UserOutlined, LockOutlined,UnlockOutlined } from '@ant-design/icons';
-import { validate_email, validatePassword, validate_password } from '../../utils/validate'
+import { Form, Input, Button, Row, Col, message } from 'antd'
+import { UserOutlined, UnlockOutlined } from '@ant-design/icons';
+import { validate_password } from '../../utils/validate'
 import Code from '../../components/code/index'
 import { Regist } from '../../api/account'
 import CryptoJS from 'crypto-js'

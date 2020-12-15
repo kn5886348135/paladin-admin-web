@@ -1,10 +1,8 @@
-import React, { Component,Fragment } from 'react'
+import React, { Component } from 'react'
 import { Layout } from 'antd'
 import { MenuFoldOutlined } from '@ant-design/icons'
 import '../layout.scss'
 import './aside.scss'
-
-const { Sider, Header, Content, Footer } = Layout
 
 class LayoutHeader extends Component {
     constructor(props){

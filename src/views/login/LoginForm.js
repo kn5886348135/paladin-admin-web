@@ -1,15 +1,14 @@
-import React, { Fragment } from 'react'
+import React from 'react'
 import { withRouter } from 'react-router-dom'
 
 import "./index.scss"
-import { Form, Input, Button, Checkbox,Row, Col, Message } from 'antd'
-import { UserOutlined, LockOutlined,UnlockOutlined, PoweroffOutlined} from '@ant-design/icons';
+import { Form, Input, Button,Row, Col } from 'antd'
+import { UserOutlined,UnlockOutlined } from '@ant-design/icons';
 import { validatePassword, validate_email } from '../../utils/validate'
 import { Login } from '../../api/account'
-import { values } from 'mobx';
 import Code from '../../components/code/index'
 import CryptoJS from 'crypto-js'
-import { setToken, getToken,setUsername } from '../../utils/cookies'
+import { setToken, setUsername } from '../../utils/cookies'
 class LoginForm extends React.Component{
     constructor(){
         super()

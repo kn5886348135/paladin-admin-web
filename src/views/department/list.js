@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { Link } from 'react-router-dom'
-import { Form, Input, Button, Table, Switch, message, Modal } from 'antd'
+import {  Button, Switch, message } from 'antd'
 import { GetDepartmentListApi, DepartmentDeleteApi,ChangeStatusApi } from '@api/department'
 import TableComponent from '@c/table'
 class DepartmentList extends Component {
@@ -38,7 +38,26 @@ class DepartmentList extends Component {
                         )
                     }
                 }
-            ]
+            ],
+            formItem: [{ 
+                type: "Input", 
+                label: '部门名称', 
+                name:'name', 
+                required: true, 
+                rules: [{}, {}],
+                style: { width: '150px'},
+                placeholder: '请输入部门名称'
+            },
+            { 
+                type: "Radio", 
+                label: '禁启用', 
+                name:'status', 
+                required: true,
+                options: [
+                    {label: '禁用',value: false},
+                    {label: '启用',value: true}
+                ]
+            }],
             },
         /*
         react路由传参3种方式
@@ -156,10 +175,10 @@ class DepartmentList extends Component {
         this.setState({
             switchId: data.id
         })
-        const requestData = {
-            id: data.id,
-            status: data.id === '1' ? true : false
-        }
+        // const requestData = {
+        //     id: data.id,
+        //     status: data.id === '1' ? true : false
+        // }
         ChangeStatusApi(data).then(res => {
             message.info(res.data.message)
             this.loadData()
@@ -196,10 +215,11 @@ class DepartmentList extends Component {
 
 
     render(h) {
-        const { columns, data, tableLoading, searchLoading } = this.state
-        const rowSelection = {
-            onChange: this.onCheckbox
-        }
+        // const { columns, data, tableLoading, searchLoading } = this.state
+        // const rowSelection = {
+        //     onChange: this.onCheckbox
+        // }
+
         return (
             <Fragment>
                 {/* <Form layout="inline" onFinish={this.search}>

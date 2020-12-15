@@ -1,5 +1,4 @@
-import { Components } from 'antd/lib/date-picker/generatePicker';
-import React, { Component } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom'
 import { getToken } from '../../utils/cookies'
 

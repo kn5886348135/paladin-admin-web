@@ -2,9 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types'
 import { Table, Pagination, Row, Col, Button } from 'antd'
 class TableBasic extends Component{
-    constructor(){
-        super()
-    }
+    
     render(){
         const { thead, dataSource, checkbox,rowKey,tableLoading,batchButton,total,changeCurrentPage, showSizeChange, handlerDelete } = this.props
         // const rowSelection = {

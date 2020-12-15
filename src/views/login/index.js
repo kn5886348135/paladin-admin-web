@@ -1,7 +1,5 @@
 import React from 'react'
 import "./index.scss"
-import { Form, Input, Button, Checkbox,Row, Col } from 'antd'
-import { UserOutlined, LockOutlined,UnlockOutlined } from '@ant-design/icons';
 import LoginForm from './LoginForm'
 import RegistForm from './RegistForm'
 
