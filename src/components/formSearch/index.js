@@ -3,6 +3,7 @@ import { Form, Input, Select, Button, InputNumber, Radio, message } from 'antd'
 import { formSubmit } from '@api/common'
 import requestUrl from "@api/requesturl"
 import PropTypes from 'prop-types'
+import Global from "@/js/global"
 
 const { Option } = Select
 
@@ -93,6 +94,8 @@ class FormSearch extends Component{
                 formItemList.push(this.inputElement(item));
             }
             if (item.type === 'Select') {
+                console.log(global[item.optionsKey]);
+                item.options = global[item.optionsKey];
                 formItemList.push(this.selectElement(item));
             }
             if (item.type === 'InputNumber') {
@@ -107,25 +110,24 @@ class FormSearch extends Component{
 
     // add edit
     onSubmit = (value) => {
-        this.props.onSubmit(value)
-
-        const data = {
-            url: requestUrl[this.props.formConfig.url],
-            data: value
+        console.log(value)
+        const searchData = {};
+        for (let key in value) {
+            console.log(key);
+            console.log(value[key]);
+            if (value[key] !== undefined && value[key] !== "") {
+                searchData[key] = value[key]
+            }
+            // if (Object.hasOwnProperty.call(oblet key)) {
+            //     const element = olet[key];
+                
+            // }
+            console.log(searchData);
         }
-        this.setState({
-            loading: true
-        })
-        formSubmit(data).then(response => {
-            message.info(response.message)
-            this.setState({
-                loading: false
-            })
-        }).catch(error => {
-            this.setState({
-                loading: false
-            })
-        })
+        
+        this.props.search(value)
+
+        
     }
 
     render(){

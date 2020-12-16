@@ -13,6 +13,7 @@ class TableComponent extends Component {
             pageNumber:1,
             pageSize:10,
             keyword:'',
+            searchData: {},
             tableLoading: false,
             data: [],
             tableLoading: false,
@@ -25,34 +26,29 @@ class TableComponent extends Component {
         this.loadData()
     }
 
-    loadData = () => {
-        const { pageNumber, pageSize, keyword} = this.state
-        // const param = {
-        //     pageNumber: pageNumber,
-        //     pageSize: pageSize
-        // }
-        // if (keyword) {
-        //     param.name = keyword
-        // }
-        // this.setState({
-        //     tableLoading: true
-        // })
+    loadData = (data) => {
+        const { pageNumber, pageSize, searchData } = this.state
         
         const param = {
+            // url: requestUrl[this.props.config.url],
             url: this.props.config.url,
             method: this.props.config.method,
             data: {
                 pageNumber: pageNumber,
-                pageSize: pageSize,
-                name: keyword
+                pageSize: pageSize
             }
             
         }
+
+        console.log(searchData)
         param.url =requesturl[this.props.config.url]
         if(keyword){
             param.data.name = keyword
         }
 
+        if (JSON.stringify(searchData) !== "{}") {
+            console.log(searchData)
+        }
 
         TableList(param).then(res => {
             console.log(res)
@@ -71,6 +67,18 @@ class TableComponent extends Component {
                     tableLoading: true
                 })
             })
+    }
+
+    search = (value)  => {
+        // reset pageNo
+        this.setState({
+            pageNumber: 1,
+            pageSize: 10,
+            searchData: value
+        },() => {
+            this.loadData();
+        })
+        console.log(value)
     }
 
     onHandlerDelete = () => {
@@ -104,22 +112,22 @@ class TableComponent extends Component {
 
     }
 
-    search = (value) => {
-        this.setState({
-            keyword:value.name,
-            pageNumber:1,
-            pageSize:10
-        })
-        this.setState({
-            searchLoading: true
-        })
-        this.loadData()
-        this.setState({
-            searchLoading: false
-        })
-        console.log(value)
-        this.loadData()
-    }
+    // search = (value) => {
+    //     this.setState({
+    //         keyword:value.name,
+    //         pageNumber:1,
+    //         pageSize:10
+    //     })
+    //     this.setState({
+    //         searchLoading: true
+    //     })
+    //     this.loadData()
+    //     this.setState({
+    //         searchLoading: false
+    //     })
+    //     console.log(value)
+    //     this.loadData()
+    // }
 
     onChangeCurrentPage = (value) => {
         // setState的第二个参数保证state的数据修改后可以立马生效
@@ -161,7 +169,7 @@ class TableComponent extends Component {
                     <Form.Item></Form.Item>
                     <Form.Item></Form.Item>
                 </Form>
-                <FormSearch formItem={formItem}/>
+                <FormSearch formItem={formItem} search={this.search} />
                 <div className="table-wrap">
                     <TableBasic 
                         columns={thead} 

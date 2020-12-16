@@ -16,7 +16,10 @@ class DepartmentList extends Component {
                 batchButton: false,
                 thead: [
                     {
-                    title:'部门名称',dataIndex:'name',key:'name',render: (name) => { return <a>{name}</a>}
+                        title:'部门名称',
+                        dataIndex:'name',
+                        key:'name',
+                        render: (name) => { return <a>{name}</a>}
                 },{
                     title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
                         return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} loading={this.state.switchId === rowData.id ? true : false} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status === 1 ? true : false } />
@@ -53,10 +56,12 @@ class DepartmentList extends Component {
                 label: '禁启用', 
                 name:'status', 
                 required: true,
-                options: [
-                    {label: '禁用',value: false},
-                    {label: '启用',value: true}
-                ]
+                style: { width: "80px" },
+                optionsKey: "status",
+                // options: [
+                //     {label: '禁用',value: false},
+                //     {label: '启用',value: true}
+                // ]
             }],
             },
         /*
