@@ -46,8 +46,23 @@ class TableComponent extends Component {
             param.data.name = keyword
         }
 
+        // if (Object.keys(searchData).length > 0) {
+            
+        // }
         if (JSON.stringify(searchData) !== "{}") {
             console.log(searchData)
+            for (let key in searchData) {
+                console.log(key);
+                console.log(searchData[key]);
+                if (searchData[key] !== undefined && searchData[key] !== "") {
+                    param.data[key] = searchData[key]
+                }
+                // if (Object.hasOwnProperty.call(oblet key)) {
+                //     const element = olet[key];
+                    
+                // }
+                console.log(searchData);
+            }
         }
 
         TableList(param).then(res => {

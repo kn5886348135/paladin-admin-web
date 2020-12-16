@@ -3,7 +3,7 @@ import { Form, Input, Select, Button, InputNumber, Radio, message } from 'antd'
 import { formSubmit } from '@api/common'
 import requestUrl from "@api/requesturl"
 import PropTypes from 'prop-types'
-import Global from "@/js/global"
+import Store from "@/store/index"
 
 const { Option } = Select
 
@@ -94,7 +94,10 @@ class FormSearch extends Component{
                 formItemList.push(this.inputElement(item));
             }
             if (item.type === 'Select') {
-                console.log(global[item.optionsKey]);
+                // console.log(global[item.optionsKey]);
+                // item.options = global[item.optionsKey];
+                // formItemList.push(this.selectElement(item));
+                console.log(Store.getState().config);
                 item.options = global[item.optionsKey];
                 formItemList.push(this.selectElement(item));
             }

@@ -2,6 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './App';
 import * as serviceWorker from './serviceWorker';
+import Store from './store';
+
+console.log(Store.getstate())
 
 ReactDOM.render(
   <App />,

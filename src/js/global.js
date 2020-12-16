@@ -4,3 +4,5 @@ const global = {
         { label: '启用',value: true}
     ]
 }
+
+export default global
