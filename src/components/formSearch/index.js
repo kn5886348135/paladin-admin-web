@@ -4,6 +4,11 @@ import { formSubmit } from '@api/common'
 import requestUrl from "@api/requesturl"
 import PropTypes from 'prop-types'
 import Store from "@/store/index"
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import requesturl from '../../api/requesturl'
+import { TableList } from '../../api/common'
+import {addDepartmentList, updateDepartmentList } from '@/store/action/department'
 
 const { Option } = Select
 
@@ -22,7 +27,7 @@ class FormSearch extends Component{
     }
 
     componentDidMount(){
-
+        this.onSubmit()
     }
 
     rules = (item) => {
@@ -111,6 +116,45 @@ class FormSearch extends Component{
         return formItemList
     }
 
+    search = (params) => {
+        const requestData = {
+            url: requesturl[this.props.config.url],
+            data: {
+                pageNumber: 1,
+                pageSize: 10
+            }
+        }
+        if (Object.keys(params.searchData).length!==0) {
+            for (let key in params.searchData) {
+                // if (Object.hasOwnProperty.call(oblet key)) {
+                //     const element = olet[key];
+                    
+                // }
+                requestData.data[key] = params.searchData[key]
+            }
+        }
+
+        TableList(requestData).then(response => {
+            const responseData = response.data.data;
+
+            // if (responseData.data) {
+            //     this.setState({
+            //         data: responseData.data,
+            //         total: responseData.total
+            //     })
+            // }
+            // this.setState({
+            //     loadingTable: false
+            // })
+            this.props.actions.add(responseData)
+
+        }).catch(error => {
+            // this.setState({
+            //     loadingTable:false
+            // })
+        })
+    }
+
     // add edit
     onSubmit = (value) => {
         console.log(value)
@@ -128,7 +172,10 @@ class FormSearch extends Component{
             console.log(searchData);
         }
         
-        this.props.search(value)
+        this.search({
+            url: 'departmentList',
+            searchData
+        })
 
         
     }
@@ -153,4 +200,21 @@ FormSearch.defaultProps = {
     batchButton: false
 }
 
-export default FormSearch
+const mapStateToProps = (state) => ({
+    config: state.config
+})
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // listData: bindActionCreators(addDepartmentList, dispatch)
+        actions: bindActionCreators({
+            add: addDepartmentList,
+            update: updateDepartmentList
+        }, dispatch)
+    }
+}
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(FormSearch)
