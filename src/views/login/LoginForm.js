@@ -8,7 +8,9 @@ import { validatePassword, validate_email } from '../../utils/validate'
 import { Login } from '../../api/account'
 import Code from '../../components/code/index'
 import CryptoJS from 'crypto-js'
-import { setToken, setUsername } from '../../utils/cookies'
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { setTokenAction, setUsernameAction } from '../../store/action/app'
 class LoginForm extends React.Component{
     constructor(){
         super()
@@ -42,8 +44,11 @@ class LoginForm extends React.Component{
         Login(requestData).then(response => {
             console.log(response)
             const data = response.data
-            setToken(data.data.token)
-            setUsername(data.data.username)
+            this.props.actions.setToken(data.token)
+            this.props.actions.setUsername(data.username)
+
+            // setToken(data.data.token)
+            // setUsername(data.data.username)
             // this.setState({
             //     login_button_loading: false
             // })
@@ -99,7 +104,7 @@ class LoginForm extends React.Component{
         this.props.switchForm("regist")
     }
     render(){
-        const { username,code_button_disabled,code_button_loading,code_button_text,module,loading } = this.state;
+        const { username,module,loading } = this.state;
         const _this = this
         return(
             <div>
@@ -177,4 +182,27 @@ class LoginForm extends React.Component{
     }
 }
 
-export default withRouter(LoginForm)
+
+// FormSearch.propTypes = {
+//     config: PropTypes.object
+// }
+
+// FormSearch.defaultProps = {
+//     batchButton: false
+// }
+
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // listData: bindActionCreators(addDepartmentList, dispatch)
+        actions: bindActionCreators({
+            setToken: setTokenAction,
+            setUsername: setUsernameAction
+        }, dispatch)
+    }
+}
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(withRouter(LoginForm))

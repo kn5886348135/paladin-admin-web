@@ -1,7 +1,5 @@
 import React, { Component } from 'react'
-import { Form, Input, Select, Button, InputNumber, Radio, message } from 'antd'
-import { formSubmit } from '@api/common'
-import requestUrl from "@api/requesturl"
+import { Form, Input, Select, Button, InputNumber, Radio } from 'antd'
 import PropTypes from 'prop-types'
 import Store from "@/store/index"
 import { connect } from 'react-redux'
@@ -94,7 +92,7 @@ class FormSearch extends Component{
             return false
         }
         const formItemList = []
-        formItem.map(item => {
+        formItem.forEach(item => {
             if (item.type === 'Input') {
                 formItemList.push(this.inputElement(item));
             }

@@ -47,6 +47,7 @@ TableBasic.defaultProps = {
 }
 
 const mapStateToProps = (state) => {
+    
     console.log(state.departmentList)
     return {
         list: state.department.departmentList

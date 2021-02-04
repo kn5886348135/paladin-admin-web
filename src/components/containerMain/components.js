@@ -3,7 +3,7 @@
 const files = require.context('../../views', true, /\.js$/)
 const components = []
 
-files.keys().map(key => {
+files.keys().forEach(key => {
   if (key.includes('./index/')||key.includes('./login/')) {
     return false
   }

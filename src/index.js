@@ -4,7 +4,7 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import Store from './store';
 
-console.log(Store.getstate())
+console.log(Store.getState())
 
 ReactDOM.render(
   <App />,

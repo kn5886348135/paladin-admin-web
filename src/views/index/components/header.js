@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import { Layout } from 'antd'
 import { MenuFoldOutlined } from '@ant-design/icons'
 import '../layout.scss'
 import './aside.scss'

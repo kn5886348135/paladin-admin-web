@@ -15,7 +15,6 @@ class TableComponent extends Component {
             keyword:'',
             tableLoading: false,
             data: [],
-            tableLoading: false,
             total:50,
             searchLoading: false
         }

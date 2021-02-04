@@ -4,7 +4,6 @@ import { TableList } from '@api/common'
 import requesturl from '@api/requesturl'
 import PropTypes from 'prop-types'
 import TableBasic from './Table'
-import FormSearch from "../formSearch"
 
 class TableComponent extends Component {
     constructor(props){
@@ -15,7 +14,6 @@ class TableComponent extends Component {
             keyword:'',
             tableLoading: false,
             data: [],
-            tableLoading: false,
             total:50,
             searchLoading: false
         }
@@ -142,7 +140,7 @@ class TableComponent extends Component {
     }
 
     render(h) {
-        const { thead,checkbox,rowKey,tableLoading,batchButton,rowSelection,searchLoading } = this.props.config
+        const { thead,checkbox,rowKey,rowSelection,searchLoading } = this.props.config
         // const rowSelection = {
         //     onChange: this.onCheckbox
         // }

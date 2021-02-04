@@ -78,7 +78,7 @@ const router = [
     {
         title:'职位管理',
         icon:'edit',
-        path:'/index/entry',
+        path:'/index/job',
         name:'index',
         meta:{
             icon:'',
@@ -86,12 +86,33 @@ const router = [
         },
         children:[
             {
-                path: 'index/entry/basic-form',
+                path: 'index/job/list',
                 title:'职位列表',
                 icon:''
             },
             {
-                path: 'index/entry/step-form',
+                path: 'index/job/add',
+                title:'添加职位',
+                icon:''
+            }
+        ]
+    },{
+        title:'职员管理',
+        icon:'edit',
+        path:'/index/staff',
+        name:'index',
+        meta:{
+            icon:'',
+            title:''
+        },
+        children:[
+            {
+                path: 'index/staff/list',
+                title:'职位列表',
+                icon:''
+            },
+            {
+                path: 'index/staff/add',
                 title:'添加职位',
                 icon:''
             }
