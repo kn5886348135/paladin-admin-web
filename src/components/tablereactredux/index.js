@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react'
 import { Form, Input, Modal, Button } from 'antd'
-import { TableList } from '@api/common'
-import requesturl from '@api/requesturl'
+import { TableList } from '../upload/node_modules/@api/common'
+import requesturl from '../upload/node_modules/@api/requesturl'
 import PropTypes from 'prop-types'
 import TableBasic from './Table'
 import FormSearch from "../formSearch"

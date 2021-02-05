@@ -8,6 +8,8 @@ import SelectComponent from '../../components/select'
 import requesturl from '../../api/requesturl'
 import { requestData } from '../../api/common'
 import Item from 'antd/lib/list/Item'
+import { nation } from '@/js/data'
+import { validate_phone } from '@/utils/validate'
 
 const { Option } = Select
 
@@ -55,7 +57,10 @@ class StaffAddForm extends Component {
                     name:'parentId', 
                     required: true, 
                     style: { width: '200px'},
-                    placeholder: '请输入姓名'
+                    placeholder: '请输入姓名',
+                    rules: [
+                        { min: 5,message: "不能小于5个字符"}
+                    ]
                 },{ 
                     type: "Radio", 
                     label: '性别', 
@@ -76,7 +81,16 @@ class StaffAddForm extends Component {
                     required: true, 
                     style: { width: '200px'},
                     placeholder: '请输入身份证号'
-                },{ 
+                },
+                { 
+                    type: "Upload", 
+                    label: '头像', 
+                    name:'parentId', 
+                    required: true, 
+                    style: { width: '200px'},
+                    message: "请上传头像"
+                },
+                { 
                     type: "Date", 
                     label: '出生年月', 
                     name:'date', 
@@ -89,7 +103,19 @@ class StaffAddForm extends Component {
                     label: '手机号', 
                     name:'phonenum', 
                     required: true,
-                    placeholder: "请输入11位手机号"
+                    placeholder: "请输入11位手机号",
+                    rules: [
+                        () => ({
+                            validator(rule, value) {
+                                // getFieldValue 获取其它dom的值
+                                console.log(value)
+                                if (validate_phone(value)) {
+                                    return Promise.resolve()
+                                }
+                                return Promise.reject("手机号格式有误")
+                            }
+                        })
+                    ]
                 },
                 { 
                     type: "Select", 
@@ -307,7 +333,7 @@ class StaffAddForm extends Component {
                             <DatePicker locale={locale} format="YYYY/MM/DD" />
                         </Col>
                         <Col className="gutter-row" span={4}>
-                            <Radio>入职</Radio>
+                            <Radio>休假</Radio>
                             <DatePicker locale={locale} format="YYYY/MM/DD" />
                         </Col>
                     </Row>
