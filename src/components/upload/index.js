@@ -17,6 +17,24 @@ class UploadComponent extends Component{
     componentDidMount(){
     }
 
+    // 组件卸载的时候删除uploadToken，可以放在外层组件，避免多个组件多次调用
+    // 主要是uploadToken的时效性问题
+    componentWillUnmount(){
+      localStorage.removeItem("uploadToken")
+    }
+
+    getUploadToken = () => {
+      // return UploadToken({
+      //   ak:"sagdsfsdfsefsdfsdafewgsfad",
+      //   sk:"sahergwefwefwefwe",
+      //   buckety: "sadgsdfsfs"
+      // }).then(res => {
+      //   const data = res.data.data
+      //   localStorage.setItem("uploadToken",data.token)
+      //   return data.data
+      // })
+    }
+
     getBase64 = (img, callback) => {
         const reader = new FileReader();
         reader.addEventListener('load', () => callback(reader.result));
@@ -24,7 +42,17 @@ class UploadComponent extends Component{
     }
 
       // 上传之前，处理格式大小等问题
-    beforeUpload = (file) => {
+    beforeUpload = async (file) => {
+
+      const uploadToken = localStorage.getItem("uploadToken")
+
+      // 多个upload使用同一个token，因为七牛云必须使用相同的token？
+      // if (!this.props.request && !uploadToken) {
+      //   return false
+      // }
+
+      const token = uploadToken || await this.getUploadToken()
+
         const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png';
         if (!isJpgOrPng) {
           message.error('You can only upload JPG/PNG file!');
@@ -33,6 +61,14 @@ class UploadComponent extends Component{
         if (!isLt2M) {
           message.error('Image must smaller than 2MB!');
         }
+        const name = file.name
+        const key = encodeURI(`${name}`)
+        this.setState({
+          uploadKey:{
+            token,
+            key
+          }
+        })
         return isJpgOrPng && isLt2M;
       }
       
@@ -88,12 +124,13 @@ class UploadComponent extends Component{
     }
 }
 
-UploadComponent.propTypes = {
-    formConfig: PropTypes.object
-}
+// UploadComponent.propTypes = {
+//     config: PropTypes.object,
+//     request: PropTypes.bool
+// }
 
-UploadComponent.defaultProps = {
-    formConfig: {}
-}
+// UploadComponent.defaultProps = {
+//   request: false
+// }
 
 export default UploadComponent

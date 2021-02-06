@@ -1,15 +1,16 @@
 import React, { Component, Fragment } from 'react'
-import { message, Select, Row, Col, Divider, Radio, DatePicker } from 'antd'
+import { message, Select, Row, Col, Divider, Radio, DatePicker, Upload } from 'antd'
 import 'moment/locale/zh-cn'
 import locale from 'antd/es/date-picker/locale/zh_CN'
 import {DepartmentAddApi,DepartmentDetailApi,DepartmentEditApi } from '../../api/department'
 import FormComponent from '@c/form'
 import SelectComponent from '../../components/select'
 import requesturl from '../../api/requesturl'
-import { requestData } from '../../api/common'
+import { requestData,upload } from '../../api/common'
 import Item from 'antd/lib/list/Item'
 import { nation } from '@/js/data'
 import { validate_phone } from '@/utils/validate'
+import { Editor } from '@tinymce/tinymce-react'
 
 const { Option } = Select
 
@@ -24,6 +25,7 @@ class StaffAddForm extends Component {
             value: true,
             loading: false,
             id: this.props.location.state ? this.props.location.state.id : "",
+            job_status: "",
             select: {
                 url: "getDepartmentList",
                 propsKey: {
@@ -54,7 +56,7 @@ class StaffAddForm extends Component {
                 { 
                     type: "Input", 
                     label: '姓名', 
-                    name:'parentId', 
+                    name:'name', 
                     required: true, 
                     style: { width: '200px'},
                     placeholder: '请输入姓名',
@@ -64,11 +66,11 @@ class StaffAddForm extends Component {
                 },{ 
                     type: "Radio", 
                     label: '性别', 
-                    name:'status', 
+                    name:'sex', 
                     required: true, 
                     options: [
-                        { label: "男", value: 1},
-                        { label: "女", value: 2}
+                        { label: "男", value: true},
+                        { label: "女", value: false}
                     ],
                     rules: [{}, {}],
                     style: { width: '150px'},
@@ -77,7 +79,7 @@ class StaffAddForm extends Component {
                 { 
                     type: "Input", 
                     label: '身份证', 
-                    name:'parentId', 
+                    name:'cardId', 
                     required: true, 
                     style: { width: '200px'},
                     placeholder: '请输入身份证号'
@@ -85,7 +87,16 @@ class StaffAddForm extends Component {
                 { 
                     type: "Upload", 
                     label: '头像', 
-                    name:'parentId', 
+                    name:'face', 
+                    request: true,
+                    required: true, 
+                    style: { width: '200px'},
+                    message: "请上传头像"
+                },
+                { 
+                    type: "Upload", 
+                    label: '毕业证', 
+                    name:'diploma_img', 
                     required: true, 
                     style: { width: '200px'},
                     message: "请上传头像"
@@ -93,7 +104,7 @@ class StaffAddForm extends Component {
                 { 
                     type: "Date", 
                     label: '出生年月', 
-                    name:'date', 
+                    name:'birthDay', 
                     format: "YYYYY/MM/DD",
                     mode: "month",
                     required: true,
@@ -120,7 +131,7 @@ class StaffAddForm extends Component {
                 { 
                     type: "Select", 
                     label: '民族', 
-                    name:'phonenum', 
+                    name:'nation', 
                     required: true,
                     options: [
                         { label: "汉族", value: "hanzu"}
@@ -130,7 +141,7 @@ class StaffAddForm extends Component {
                 { 
                     type: "Select", 
                     label: '政治面貌', 
-                    name:'phonenum', 
+                    name:'political', 
                     required: true,
                     options: [
                         { label: "党员", value: "dangyuan"},
@@ -139,37 +150,96 @@ class StaffAddForm extends Component {
                     ],
                     placeholder: "请选择政治面貌"
                 },
+                { 
+                    type: "Input", 
+                    label: '毕业院校', 
+                    name:'school', 
+                    required: true,
+                    placeholder: "请输入毕业院校"
+                },
+                { 
+                    type: "Select", 
+                    label: '学历', 
+                    name:'education', 
+                    required: true,
+                    placeholder: "请选择学历"
+                },
+                { 
+                    type: "Input", 
+                    label: '专业', 
+                    name:'major', 
+                    required: true,
+                    placeholder: "输入专业"
+                },
+                { 
+                    type: "Input", 
+                    label: '微信号', 
+                    name:'wechat', 
+                    required: true,
+                    placeholder: "请输入微信号"
+                },
+                { 
+                    type: "Input", 
+                    label: '邮箱', 
+                    name:'email', 
+                    required: true,
+                    placeholder: "请输入邮箱"
+                },
                 {
                     type: "Column",
                     label: "就职信息"
                 },{ 
-                    type: "Select", 
+                    type: "SelectComponent", 
+                    url: "job/listAll",
+                    propsKey: {
+                        label: "jobName",
+                        value: "jobId"
+                    },
                     label: '职位', 
-                    name:'phonenum', 
+                    name:'job_id', 
                     required: true,
                     style: { width: "200px" },
-                    placeholder: "请选择政治面貌"
-                },{ 
-                    type: "Select", 
-                    label: '公司邮箱', 
-                    name:'phonenum', 
-                    required: true,
-                    style: { width: "200px" },
-                    placeholder: "请选择政治面貌"
+                    placeholder: "请选择职位"
                 },
                 { 
                     type: "Slot", 
                     label: '职位状态', 
-                    name:'phonenum', 
+                    name:'job_status', 
                     required: true,
                     style: { width: "200px" },
-                    placeholder: "请选择政治面貌"
+                    placeholder: "请选择职位状态"
+                },
+                { 
+                    type: "Input", 
+                    label: '公司邮箱', 
+                    name:'company_email', 
+                    required: true,
+                    style: { width: "200px" },
+                    placeholder: "请输入公司邮箱"
+                },
+                { 
+                    type: "Radio", 
+                    label: '禁启用', 
+                    name:'status', 
+                    required: true,
+                    options: [
+                        {label: "禁用",value: false},
+                        {label: "启用",value: true}
+                    ]
                 },
                 { 
                     type: "Input", 
                     label: '描述', 
                     name:'description', 
                     required: true, 
+                    placeholder: "请输入描述内容"
+                },
+                { 
+                    type: "Editor", 
+                    label: '描述', 
+                    name:'description' ,
+                    required: true,
+                    placeholder: "请输入描述内容"
                 }
             ]
         }
@@ -294,8 +364,44 @@ class StaffAddForm extends Component {
         })).catch()
     }
 
+    /** 获取富文本内容 */
+    handleEditorChange = (value) => {
+        console.log(value)
+    }
+
+    onChange = (e) => {
+        console.log(e)
+        this.setState({
+            job_status: e.target.value
+        })
+    }
+
     render(h) {
         
+        const editorObj={
+            height:"800",
+            language:"zh_CN",
+            plugins:"table lists link image preview code",
+            toolbar:"formatselect | code | preview | bold italic strikethrough forcecolor backcolor | link image | alignleft aligncenter alignright alignjustify",
+            relative_urls: false,
+            file_picker_types:"image",
+            images_upload_url:"http",
+            image_advtab: true,
+            image_uploadtab: true,
+            images_upload_handler: (blobInfo, success, failure) => {
+                var formData;
+                var file = blobInfo.blob();
+                formData = new FormData()
+                formData.append('file', file, file.name)
+                upload(formData).then(response => {
+                    console.log(response.data.data)
+                    const data = response.data.data.url
+                    success(data)
+                }).catch(error => {
+                    console.log(error)
+                })
+            },
+        }
         return (
             <Fragment>
                 <SelectComponent url = {this.state.select.url} propsKey = {this.state.select.propsKey} name={this.state.props.name}/>
@@ -322,21 +428,23 @@ class StaffAddForm extends Component {
                 </Form> */}
                 {/* 插槽 */}
                 <FormComponent formItem = {this.state.formItem} formLayout={this.state.formLayout} formConfig={this.state.formConfig} >
-                    <div ref="jobStatus" />
-                    <Row gutter={16}>
-                        <Col className="gutter-row" span={4}>
-                            <Radio>在职</Radio>
-                            <DatePicker locale={locale} format="YYYY/MM/DD" />
-                        </Col>
-                        <Col className="gutter-row" span={4}>
-                        <Radio>在职</Radio>
-                            <DatePicker locale={locale} format="YYYY/MM/DD" />
-                        </Col>
-                        <Col className="gutter-row" span={4}>
-                            <Radio>休假</Radio>
-                            <DatePicker locale={locale} format="YYYY/MM/DD" />
-                        </Col>
-                    </Row>
+                    <div ref="jobStatus" style={{width: "500px"}}/>
+                    <Radio.Group onChange={this.onChange} value={this.state.job_status} style={{width: "100%"}}>
+                        <Row gutter={16}>
+                            <Col className="gutter-row" span={4}>
+                                <Radio value={"online"}>在职</Radio>
+                                <DatePicker locale={locale} format="YYYY/MM/DD" />
+                            </Col>
+                            <Col className="gutter-row" span={4}>
+                            <Radio value={"quit"}>离职</Radio>
+                                <DatePicker locale={locale} format="YYYY/MM/DD" />
+                            </Col>
+                            <Col className="gutter-row" span={4}>
+                                <Radio value={"vacation"}>休假</Radio>
+                                <DatePicker locale={locale} format="YYYY/MM/DD" />
+                            </Col>
+                        </Row>
+                    </Radio.Group>
                     <Select  ref="jobStatus">
                         {
                            this.state.selectitem && this.state.selectitem.map(ele => {
@@ -354,6 +462,14 @@ class StaffAddForm extends Component {
                     </Select>
                 </FormComponent>
 
+                <Editor 
+                    inline={false}
+                    selector="editorStateRef"
+                    apiKey="官网上申请在key值"
+                    initialValue={"111"}
+                    init={{...editorObj}}
+                    onEditorChange={this.handleEditorChange}
+                />
                 {
                 /**
                  * 1、插槽没有元素的情况，this.props.children 获取的是undefined

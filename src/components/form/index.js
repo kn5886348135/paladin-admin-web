@@ -8,6 +8,7 @@ import PropTypes from 'prop-types'
 import FormSearch from '../formSearch'
 import SelectComponent from '../select/index'
 import UploadComponent from '../upload/index'
+import EditorComponent from '../editor/index'
 
 const { Option } = Select
 
@@ -21,7 +22,8 @@ class FormComponent extends Component{
                 "Radio":'请选择',
                 "Select":'请选择',
                 "Date":'请选择',
-                "Upload": "请上传"
+                "Upload": "请上传",
+                "Editor": "请输入"
             }
         }
         console.log(props)
@@ -150,6 +152,15 @@ class FormComponent extends Component{
         )
     }
 
+    editorElement = (item) => {
+        const rules = this.rules(item)
+        return (
+            <Form.item label={item.label} name={item.name} key={item.name} rules={rules}>
+                <EditorComponent name={item.name}/>
+            </Form.item>
+        )
+    }
+
     initFormItem = (item) => {
         const { formItem } = this.props
         if (!formItem || (formItem && formItem.length === 0)) {
@@ -184,6 +195,9 @@ class FormComponent extends Component{
             }
             if (item.type === 'Upload') {
                 formItemList.push(this.uploadElement(item));
+            }
+            if (item.type === 'Editor') {
+                formItemList.push(this.editorElement(item));
             }
         })
         return formItemList
