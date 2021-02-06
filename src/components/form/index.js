@@ -23,7 +23,8 @@ class FormComponent extends Component{
                 "Select":'请选择',
                 "Date":'请选择',
                 "Upload": "请上传",
-                "Editor": "请输入"
+                "Editor": "请输入",
+                "SelectComponent": "请选择"
             }
         }
         console.log(props)
@@ -57,6 +58,15 @@ class FormComponent extends Component{
         return Promise.resolve()
     }
     
+    validateComponents = (rule, value) => {
+        console.log(value)
+        if (value) {
+            return Promise.resolve()
+        }
+        // return Promise.reject("")
+        return Promise.reject("选项不能为空")
+    }
+
     inputElement = (item) => {
         const rules = this.rules(item)
         return (
@@ -85,7 +95,7 @@ class FormComponent extends Component{
         // const rules = this.rules(item)
         return (
             <Form.Item label={item.label} name={item.name} key={item.name} rules={item.rules || []}>
-                <SelectComponent url={item.url} props={item.param} />
+                <SelectComponent url={item.url} props={item.param} initValue={this.props.formConfig.setFieldValue} />
             </Form.Item>
         )
     }
@@ -137,7 +147,7 @@ class FormComponent extends Component{
     dateElement = (item) => {
         const rules = this.rules(item)
         return (
-            <Form.item label={item.label} name={item.name} key={item.name} rules={rules}>
+            <Form.item label={item.label} name={item.name} key={item.name} rules={[...rules,{validator: this.validateComponents}]}>
                 <DatePicker locale={locale} format={item.format} picker={item.mode}/>
             </Form.item>
         )
@@ -146,8 +156,8 @@ class FormComponent extends Component{
     uploadElement = (item) => {
         const rules = this.rules(item)
         return (
-            <Form.item label={item.label} name={item.name} key={item.name} rules={rules}>
-                <UploadComponent name={item.name}/>
+            <Form.item label={item.label} name={item.name} key={item.name} rules={[...rules,{validator: this.validateComponents}]}>
+                <UploadComponent name={item.name} request={item.request} initValue={this.props.formConfig.setFieldValue}/>
             </Form.item>
         )
     }
@@ -155,8 +165,8 @@ class FormComponent extends Component{
     editorElement = (item) => {
         const rules = this.rules(item)
         return (
-            <Form.item label={item.label} name={item.name} key={item.name} rules={rules}>
-                <EditorComponent name={item.name}/>
+            <Form.item label={item.label} name={item.name} key={item.name} rules={[...rules,{validator: this.validateComponents}]} >
+                <EditorComponent name={item.name} initValue={this.props.formConfig.setFieldValue} />
             </Form.item>
         )
     }

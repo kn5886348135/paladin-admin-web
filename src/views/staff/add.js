@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import { message, Select, Row, Col, Divider, Radio, DatePicker, Upload } from 'antd'
 import 'moment/locale/zh-cn'
 import locale from 'antd/es/date-picker/locale/zh_CN'
-import {DepartmentAddApi,DepartmentDetailApi,DepartmentEditApi } from '../../api/department'
+import {Add,Detailed,StaffEditApi } from '@/api/staff'
 import FormComponent from '@c/form'
 import SelectComponent from '../../components/select'
 import requesturl from '../../api/requesturl'
@@ -11,7 +11,8 @@ import Item from 'antd/lib/list/Item'
 import { nation } from '@/js/data'
 import { validate_phone } from '@/utils/validate'
 import { Editor } from '@tinymce/tinymce-react'
-
+// 日期转换
+import moment from 'moment'
 const { Option } = Select
 
 class StaffAddForm extends Component {
@@ -128,6 +129,7 @@ class StaffAddForm extends Component {
                         })
                     ]
                 },
+                /** 民族太多，可以做个下拉选择搜索 */
                 { 
                     type: "Select", 
                     label: '民族', 
@@ -266,14 +268,18 @@ class StaffAddForm extends Component {
         if (!this.props.location.state) {
             return false
         }
-        DepartmentDetailApi(this.props.location.state.id).then(res=>{
+        Detailed(this.props.location.state.id).then(res=>{
             console.log(res)
-            // const data = res.data.data
-
+            const data = res.data.data
+            // 日期处理
+            const basicDate = {
+                birthday: data.birthday ? moment(data.birthday) : null
+            }
             this.setState({
                 formConfig: {
                     ...this.state.formConfig,
-                    setFieldValue: Response.data.data,
+                    // setFieldValue: res.data.data,
+                    setFieldValue: {...data, ...basicDate},
                     url: "jobEdit",
                     editKey: "jobId"
                 }
@@ -330,7 +336,7 @@ class StaffAddForm extends Component {
     }
 
     onHandlerAdd = (value) => {
-        DepartmentAddApi(value).then(res => {
+        Add(value).then(res => {
             console.log(res)
             message.info(res.data.message)
             this.setState({
@@ -345,11 +351,19 @@ class StaffAddForm extends Component {
         })).catch()
     }
 
+    /** id存在走编辑逻辑，不存在则走添加逻辑 */
+    onHandlerSubmit = (value) => {
+        this.state.id ? this.onHandlerEdit(value) : this.onHandlerSubmit(value)
+    }
+
     onHandlerEdit = (value) => {
         const requestData = value
         requestData.id = this.state.id
 
-        DepartmentEditApi(requestData).then(res => {
+        // 日期转换
+        requestData.birthday = new Date(requestData.birthday)
+        
+        StaffEditApi(requestData).then(res => {
             console.log(res)
             message.info(res.data.message)
             this.setState({
@@ -427,7 +441,7 @@ class StaffAddForm extends Component {
                     </Form.Item>
                 </Form> */}
                 {/* 插槽 */}
-                <FormComponent formItem = {this.state.formItem} formLayout={this.state.formLayout} formConfig={this.state.formConfig} >
+                <FormComponent formItem = {this.state.formItem} formLayout={this.state.formLayout} formConfig={this.state.formConfig} submit={this.onHandlerSubmit}>
                     <div ref="jobStatus" style={{width: "500px"}}/>
                     <Radio.Group onChange={this.onChange} value={this.state.job_status} style={{width: "100%"}}>
                         <Row gutter={16}>

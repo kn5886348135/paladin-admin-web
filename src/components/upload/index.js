@@ -9,13 +9,49 @@ class UploadComponent extends Component{
         this.state = {
             imageUrl: "",
             loading: false,
-            name: props.name
+            name: props.name,
+            uploadKey: {
+              token: "",
+              key: ""
+            }
         }
         console.log(props)
     }
 
     componentDidMount(){
     }
+
+    static getDerivedStateFromProps(nextProps, prevState){
+      console.log(nextProps)
+      console.log(prevState)
+      let { value } = nextProps
+      if (!value) {
+          return false
+      }
+      console.log(Object.prototype.toString.call(value) === "[object Object]")
+      // 上传组件不是对象，不像Select组件需要判断对象
+      // 父组件传值到子组件
+      // if (Object.prototype.toString.call(value) === "[object Object]") {
+      //     console.log(111)
+      //     console.log(nextProps)
+      //     value = value[name]
+      //     // return false
+      // }
+
+      if (value !== prevState.value) {
+        return {
+          value: value
+        }
+    }
+
+      console.log(value)
+      // if (value !== prevState.value) {
+      //     return {
+      //         value: value
+      //     }
+      // }
+      return null
+  }
 
     // 组件卸载的时候删除uploadToken，可以放在外层组件，避免多个组件多次调用
     // 主要是uploadToken的时效性问题
@@ -96,7 +132,8 @@ class UploadComponent extends Component{
       triggerChange = (changedValue) => {
           const onChange = this.props.onChange
           if (onChange) {
-              onChange({[this.state.name]: changedValue})
+              // onChange({[this.state.name]: changedValue})
+              onChange(changedValue)
           }
       }
 

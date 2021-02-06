@@ -73,7 +73,9 @@ class SelectComponent extends Component{
     triggerChange = (changedValue) => {
         const onChange = this.props.onChange;
         if (onChange) {
-            onChange({[this.state.name]: changedValue})
+            onChange(changedValue)
+            /** 提交的时候是对象，不是字符串 */
+            // onChange({[this.state.name]: changedValue})
         }
     }
     render(){

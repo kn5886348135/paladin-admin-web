@@ -17,13 +17,18 @@ class DepartmentList extends Component {
                 batchButton: false,
                 thead: [
                     {
+                        title:'姓名',
+                        dataIndex:'full_name',
+                        key:'full_name'
+                },
+                    {
                         title:'职位名称',
                         dataIndex:'jobName',
                         key:'jobName'
                 },{
                     title:'部门名称',
                     dataIndex:'name',
-                    key:'jobName'
+                    key:'name'
             },{
                     title:'禁启用',dataIndex:'status',key:'status',render: (text, rowData) => {
                         return <Switch onChange={() => {this.onHandlerSwitch(rowData)}} loading={this.state.switchId === rowData.id ? true : false} checkedChildren="启用" unCheckedChildren="禁用" defaultChecked={ rowData.status } />
