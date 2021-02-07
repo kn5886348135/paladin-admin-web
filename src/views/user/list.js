@@ -34,7 +34,32 @@ class User extends React.Component{
                         title: "入职日期",
                         dataIndex: "job_entry_date",
                         key: "job_entry_date"
+                    },
+                    {
+                        title: "权限",
+                        dataIndex: "role_str",
+                        key: "role_str"
+                    },
+                    {
+                        title: "操作",
+                        dataIndex: "operation",
+                        key: "operation",
+                        width: 215,
+                        render: (text,rowData) => {
+                            // const {}
+                            return(
+                                <div className="inline-button">
+                                    <Button type="primary" onClick={() => this.userModal({status: true, user_id: rowData.id})}>
+                                        编辑
+                                        {/* <Link to={{ pathname: '/index/staff/add',state: {id: rowData.staff_id}}}></Link> */}
+                                    </Button>
+                                    <Button onClick={() => this.delete(rowData.staff_id)}>删除</Button>
+                                </div>
+                            )
+                        }
                     }
+
+                    
                 ],
                 formItem: [
                     {
@@ -72,10 +97,17 @@ class User extends React.Component{
         this.child = ref
     }
 
-    userModal = () => {
-        this.child.visibleModal(true)
+    userModal = (rowData) => {
+        this.child.visibleModal(rowData.status)
     }
     
+    // onHandlerEdit(data){
+    //     this.userModal({
+    //         status: true,
+    //         user_id: 
+    //     })
+    // }
+
     onHandlerSwitch(data){
         if (this.state.flag) {
             return false
@@ -108,7 +140,7 @@ class User extends React.Component{
         return(
             <Fragment>
                 <TableComponent onRef={this.getChildRef} batchButton={true} config={this.state.tableConfig}>
-                    <Button type="primary" ref="userAdd" onClick={this.userModal}>新增用户</Button>
+                    <Button type="primary" ref="userAdd" onClick={() => this.userModal({ status: true})}>新增用户</Button>
                     {/* 新增用户弹出模态框 */}
 
                 </TableComponent>
