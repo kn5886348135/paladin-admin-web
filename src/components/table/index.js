@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react'
-import { Form, Input, Modal, Button } from 'antd'
+import { Form, Input, Modal, Button,Row,Col } from 'antd'
 import { TableList } from '@api/common'
 import requesturl from '@api/requesturl'
 import PropTypes from 'prop-types'
 import TableBasic from './Table'
-
+import FormSearch from '../formSearch/index'
 class TableComponent extends Component {
     constructor(props){
         super(props)
@@ -140,13 +140,21 @@ class TableComponent extends Component {
     }
 
     render(h) {
-        const { thead,checkbox,rowKey,rowSelection,searchLoading } = this.props.config
+        const { thead,checkbox,rowKey,rowSelection,searchLoading,formItem,formSearchCol,formSearchRight } = this.props.config
         // const rowSelection = {
         //     onChange: this.onCheckbox
         // }
         return (
             <Fragment>
-                <Form layout="inline" onFinish={this.search}>
+                {/* form表单筛选 */}
+                <Row>
+                    <Col span={formSearchCol || 18}><FormSearch formItem={formItem} search={this.search}/></Col>
+                    <Col span={formSearchRight || 6}>
+                        <div className="pull-right">{this.props.children}</div>
+                    </Col>
+                </Row>
+                
+                <FormSearch layout="inline" onFinish={this.search}>
                     <Form.Item
                         name="name"
                         label="部门名称"
@@ -158,7 +166,7 @@ class TableComponent extends Component {
                     </Form.Item>
                     <Form.Item></Form.Item>
                     <Form.Item></Form.Item>
-                </Form>
+                </FormSearch>
                 <div className="table-wrap">
                     <TableBasic 
                         columns={thead} 

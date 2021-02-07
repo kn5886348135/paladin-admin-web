@@ -268,26 +268,37 @@ class FormComponent extends Component{
     }
 
     render(){
+        const { submitButton } = this.props
         return(
             <Form ref="form" onFinish={this.onSubmit} initialValues={{ status:true,number:0 }} {...this.props.formLayout}>
                 { this.initFormItem() }
+                {
+                    submitButton ? 
+                    <Form.Item ><Button loading={this.state.loading} htmlType="submit" type="primary" >确定</Button></Form.Item> : 
+                    ""
+                }
                 {/* 接收插槽内容 */}
                 { this.props.children }
                 console.log({ this.props.children })
-                <Form.Item >
-                        <Button loading={this.state.loading} htmlType="submit" type="primary" >确定</Button>
-                </Form.Item>
+                
             </Form>
         )
     }
 }
 
 FormSearch.propTypes = {
-    config: PropTypes.object
+    config: PropTypes.object,
+    formConfig: PropTypes.object,
+    submitButton: PropTypes.bool
 }
 
 FormSearch.defaultProps = {
-    batchButton: false
+    batchButton: false,
+    formConfig: {
+        
+    },
+    submitButton: true
+
 }
 
 export default FormComponent
