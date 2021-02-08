@@ -9,6 +9,7 @@
 //     )
 // }
 
+// 权限在路由上的控制问题？
 // export default Root
 const router = [
     {
@@ -29,6 +30,8 @@ const router = [
     {
         title:'用户管理',
         icon:'laptop',
+        key:'/index/user',
+        role: ['user'],
         path:'/index/user',
         name:'index',
         meta:{
@@ -42,9 +45,11 @@ const router = [
                 icon:''
             },
             {
+                key: '/index/user/add',
+                title: '添加用户',
                 path: '/index/user/add',
-                title:'添加用户',
-                icon:''
+                icon:'',
+                role: ['information']
             }
         ]
     },

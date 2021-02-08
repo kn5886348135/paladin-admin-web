@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { Link,withRouter } from 'react-router-dom'
 import './aside.scss'
 import { Menu } from 'antd'
+import { connect } from 'react-redux'
 import { UserOutlined } from '@ant-design/icons';
 import Router from '../../router/router'
 
@@ -10,11 +11,50 @@ class AsideMenu extends Component {
     constructor(props){
         super(props)
         this.state = {
+            // router: [],
             selectedKeys:['/index/user/list'],
             openKeys:['/index/user']
         }
         console.log(Router)
     }
+
+    // 弃用方法,挂在之前过滤权限对应的路由,可以考虑递归处理
+    // UNSAFE_componentWillMount(){
+    //     const role = sessionStorage.getItem("role").split(",")
+    //     console.log(role)
+    //     let routerArray = []
+    //     if (role.includes("admin")) {
+    //         routerArray = Router
+    //     }else{
+    //         routerArray = Router.filter((item) => {
+    //             console.log(item)
+    //             if (this.hasPermission(role,item)) {
+    //                 if (item.child && item.child.length>0) {
+    //                     item.child = item.child.filter((child) => {
+    //                         if (this.hasPermission(role,child)) {
+    //                             return child
+    //                         }
+    //                         return false
+    //                     })
+    //                     return item
+    //                 }
+    //                 return item
+    //             }
+    //             return false
+    //         })
+    //     }
+    //     this.setState({
+    //         router: routerArray
+    //     })
+    //     console.log(routerArray)
+    // }
+
+    // //
+    // hasPermission = (role,router) => {
+    //     if (router.role && router.role.length >0) {
+    //         return role.some(element => router.role.indexOf(element) >= 0)
+    //     }
+    // }
 
     componentDidMount(){
         const pathname = this.props.location.pathname
@@ -79,7 +119,8 @@ class AsideMenu extends Component {
     }
 
     render(h) {
-        const { selectedKeys, openKeys } = this.state
+        const { selectedKeys, openKeys,routers } = this.state
+        // const { routers } = this.props
         return (
             <Fragment >
                <Menu
@@ -92,7 +133,7 @@ class AsideMenu extends Component {
                 collapsed={this.state.collapsed}
                 >
                     {
-                        Router && Router.map(item => {
+                        routers && routers.map(item => {
                             return item.children && item.children.length>0?this.renderSubMenu(item):this.renderMenu(item)
                         })
                     }
@@ -102,4 +143,23 @@ class AsideMenu extends Component {
     }
 }
 
-export default withRouter(AsideMenu)
+// const mapStateToProps = (state) => ({
+//     routers: state.app.routers
+// })
+
+// const mapDispatchToProps = (dispatch) => {
+//     return {
+//         // listData: bindActionCreators(addDepartmentList, dispatch)
+//         actions: bindActionCreators({
+//             setToken: setTokenAction,
+//             setUsername: setUsernameAction
+//         }, dispatch)
+//     }
+// }
+
+// export default connect(
+//     mapStateToProps,
+//     null
+// )(withRouter(AsideMenu))
+
+export default AsideMenu

@@ -11,6 +11,7 @@ import CryptoJS from 'crypto-js'
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { setTokenAction, setUsernameAction } from '../../store/action/app'
+import { setToken, setUsername } from '../../utils/cookies';
 class LoginForm extends React.Component{
     constructor(){
         super()
@@ -41,30 +42,40 @@ class LoginForm extends React.Component{
             loading:true
         })
         console.log(requestData)
-        Login(requestData).then(response => {
-            console.log(response)
-            const data = response.data
-            this.props.actions.setToken(data.token)
-            this.props.actions.setUsername(data.username)
-
-            // setToken(data.data.token)
-            // setUsername(data.data.username)
-            // this.setState({
-            //     login_button_loading: false
-            // })
-            if (response.data.resCode === 0) {
-                this.setState({
-                    loading:false
-                })
-            }
-            console.log(response)
-            console.log('start to push')
+        console.log(this.props.actions.handlerLogin(requestData))
+        this.props.actions.handlerLogin(requestData).then(res => {
             this.props.history.push('/index')
-        }).catch(error => {
-            this.setState({
-                loading:true
-            })
         })
+
+        // Login(requestData).then(response => {
+        //     console.log(response)
+        //     this.setState({
+        //         loading: false
+        //     })
+
+        //     const data = response.data
+
+        //     this.props.actions.setToken(data.token)
+        //     this.props.actions.setUsername(data.username)
+
+        //     setToken(data.data.token)
+        //     setUsername(data.data.username)
+        //     sessionStorage.setItem("role", data.role)
+            
+        //     if (response.data.resCode === 0) {
+        //         this.setState({
+        //             loading:false
+        //         })
+        //     }
+            
+        //     console.log(response)
+        //     console.log('start to push')
+        //     this.props.history.push('/index')
+        // }).catch(error => {
+        //     this.setState({
+        //         loading:true
+        //     })
+        // })
         console.log('Finish:', values);
     }
 

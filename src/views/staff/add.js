@@ -49,6 +49,10 @@ class StaffAddForm extends Component {
                 setFieldValue: {},
                 formatFormKey: "parentId"
             },
+            formLayout: {
+                labelCol: {span: 2},
+                wrapperCol: { span: 20}
+            },
             formItem: [
                 {
                     type: "Column",

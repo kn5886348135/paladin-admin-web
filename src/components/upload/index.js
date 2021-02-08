@@ -40,7 +40,7 @@ class UploadComponent extends Component{
 
       if (value !== prevState.value) {
         return {
-          value: value
+          imageUrl: value
         }
     }
 

@@ -16,9 +16,9 @@ export function UserDetailed(data){
     })
 }
 
-export function StaffEditApi(data){
+export function UserEdit(data){
     return service.request({
-        url:'/staff/edit',
+        url:'/user/edit',
         method: 'post',
         data
     })

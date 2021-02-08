@@ -67,6 +67,7 @@ class FormComponent extends Component{
         return Promise.reject("选项不能为空")
     }
 
+    // 密码框可以使用antd专门在密码输入框 Input.Password
     inputElement = (item) => {
         const rules = this.rules(item)
         return (
