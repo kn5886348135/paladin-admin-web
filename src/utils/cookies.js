@@ -19,3 +19,11 @@ export function setUsername(value){
 export function getUsername(value){
     return cookies.load(username)
 }
+
+export function removeToken(){
+    cookies.remove(adminToken, { path: "/"})
+}
+
+export function removeUsername(){
+    cookies.remove(username, { path: "/"})
+}

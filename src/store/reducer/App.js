@@ -1,5 +1,5 @@
 // global config
-import { setTokenKey, setUsernameKey } from '../Type'
+import { setTokenKey, setUsernameKey,logout,router } from '../Type'
 import { getToken, getUsername } from '@/utils/cookies'
 
 const app = {
@@ -21,6 +21,20 @@ const appReducer = function(state = app, action){
                 username: action.value
             }
         }
+        case logout: {
+            return {
+                ...state,
+                token: action.value,
+                username: action.value
+            }
+        }
+        case router: {
+            return {
+                ...state,
+                routers: action.value
+            }
+        }
+
         default:
             return state
     }
